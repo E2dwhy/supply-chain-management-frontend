@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 :host {
   background: var(--navigation-background);
   display: block;
@@ -9,3 +10,16 @@
 .navigation {
   height: var(--navigation-height);
 }
+=======
+:host {
+  background: var(--navigation-background);
+  display: block;
+  height: var(--navigation-height);
+  position: relative;
+  z-index: 200;
+}
+
+.navigation {
+  height: var(--navigation-height);
+}
+>>>>>>> 98d0c17... feat: push base  code to repository

@@ -21,6 +21,7 @@ export class InvoiceComponent implements OnInit {
   ngOnInit() {
   }
 
+<<<<<<< HEAD
   print(): void {
     let printContents, popupWin;
     printContents = document.getElementById('print-section').innerHTML;
@@ -43,4 +44,6 @@ export class InvoiceComponent implements OnInit {
     popupWin.document.close();
   }
 
+=======
+>>>>>>> 98d0c17... feat: push base  code to repository
 }

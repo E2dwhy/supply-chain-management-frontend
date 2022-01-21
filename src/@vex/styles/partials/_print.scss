@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 @media print {
   html, body {
     height: auto !important;
@@ -33,3 +34,40 @@
     display: none !important;
   }
 }
+=======
+@media print {
+  html, body {
+    height: auto !important;
+    overflow: initial !important;
+  }
+
+  .vex-toolbar, .sidenav {
+    display: none !important;
+  }
+
+  .content {
+    margin-top: 0 !important;
+  }
+
+  .mat-drawer-container {
+    overflow: visible !important;
+  }
+
+  .mat-drawer-side {
+    border-right: none !important;
+  }
+
+  .sidenav-content {
+    margin-left: 0 !important;
+    @apply bg-card;
+  }
+
+  .vex-footer {
+    display: none !important;
+  }
+
+  .config-panel-toggle {
+    display: none !important;
+  }
+}
+>>>>>>> 98d0c17... feat: push base  code to repository

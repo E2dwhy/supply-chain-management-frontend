@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .radio {
   display: inline-flex;
   flex-direction: column;
@@ -6,3 +7,13 @@
     margin-bottom: 12px;
   }
 }
+=======
+.radio {
+  display: inline-flex;
+  flex-direction: column;
+
+  .mat-radio-button {
+    margin-bottom: 12px;
+  }
+}
+>>>>>>> 98d0c17... feat: push base  code to repository

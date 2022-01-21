@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .mat-expansion-panel:not([class*=mat-elevation-z]) {
   border-bottom: 1px solid var(--foreground-divider);
   border-left: 1px solid var(--foreground-divider);
@@ -8,3 +9,15 @@
     border-top: 1px solid var(--foreground-divider);
   }
 }
+=======
+.mat-expansion-panel:not([class*=mat-elevation-z]) {
+  border-bottom: 1px solid var(--foreground-divider);
+  border-left: 1px solid var(--foreground-divider);
+  border-right: 1px solid var(--foreground-divider);
+  box-shadow: none;
+
+  &:first-of-type {
+    border-top: 1px solid var(--foreground-divider);
+  }
+}
+>>>>>>> 98d0c17... feat: push base  code to repository

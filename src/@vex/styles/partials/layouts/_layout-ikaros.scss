@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .vex-layout-ikaros {
   --navigation-height: 0px;
 
@@ -7,3 +8,14 @@
     --toolbar-color: white;
   }
 }
+=======
+.vex-layout-ikaros {
+  --navigation-height: 0px;
+
+  &.vex-style-default {
+    --toolbar-background: #{$sidenav-background};
+    --navigation-color: white;
+    --toolbar-color: white;
+  }
+}
+>>>>>>> 98d0c17... feat: push base  code to repository

@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 .button {
 
   &.active {
@@ -8,3 +9,15 @@
     color: var(--toolbar-icon-color);
   }
 }
+=======
+.button {
+
+  &.active {
+    background: var(--background-hover);
+  }
+
+  .mat-icon {
+    color: var(--toolbar-icon-color);
+  }
+}
+>>>>>>> 98d0c17... feat: push base  code to repository

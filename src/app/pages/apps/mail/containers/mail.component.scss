@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 $height: 64px;
 
 .vex-mail-header {
@@ -21,3 +22,28 @@ $height: 64px;
 .vex-mail-drawer {
   border: 0 !important;
 }
+=======
+$height: 64px;
+
+.vex-mail-header {
+  height: 56px;
+}
+
+@screen lg {
+  .vex-mail-header {
+    height: 200px;
+  }
+
+  .vex-mail-header-overflow {
+    height: $height;
+  }
+
+  .vex-mail-content-overflow {
+    margin-top: -$height;
+  }
+}
+
+.vex-mail-drawer {
+  border: 0 !important;
+}
+>>>>>>> 98d0c17... feat: push base  code to repository

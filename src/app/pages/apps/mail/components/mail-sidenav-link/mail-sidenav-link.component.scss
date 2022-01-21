@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 
 a.active {
   @apply bg-primary text-primary-contrast;
@@ -6,3 +7,13 @@ a.active {
 a:not(.active):hover {
   @apply bg-hover;
 }
+=======
+
+a.active {
+  @apply bg-primary text-primary-contrast;
+}
+
+a:not(.active):hover {
+  @apply bg-hover;
+}
+>>>>>>> 98d0c17... feat: push base  code to repository

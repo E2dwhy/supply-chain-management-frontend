@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { Component, OnInit } from '@angular/core';
 import icFavorite from '@iconify/icons-ic/twotone-favorite';
 
@@ -19,3 +20,26 @@ export class ComponentsOverviewTooltipComponent implements OnInit {
   ngOnInit() {
   }
 }
+=======
+import { Component, OnInit } from '@angular/core';
+import icFavorite from '@iconify/icons-ic/twotone-favorite';
+
+@Component({
+  selector: 'vex-components-overview-tooltip',
+  templateUrl: './components-overview-tooltip.component.html',
+  styleUrls: ['./components-overview-tooltip.component.scss']
+})
+export class ComponentsOverviewTooltipComponent implements OnInit {
+
+  tooltipHTML = `<button mat-icon-button matTooltip="Favorite this">
+  <mat-icon>favorite</mat-icon>
+</button>`;
+
+  icFavorite = icFavorite;
+
+  constructor() { }
+
+  ngOnInit() {
+  }
+}
+>>>>>>> 98d0c17... feat: push base  code to repository
