@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 :host {
   background: var(--toolbar-background);
   box-sizing: border-box;
@@ -21,27 +20,3 @@ a {
   color: var(--toolbar-color);
   text-decoration: none;
 }
-=======
-:host {
-  background: var(--toolbar-background);
-  box-sizing: border-box;
-  color: var(--toolbar-color);
-  display: block;
-  white-space: nowrap;
-  width: 100%;
-  z-index: var(--toolbar-z-index);
-}
-
-.toolbar {
-  height: var(--toolbar-height);
-}
-
-.mat-icon {
-  color: var(--toolbar-icon-color);
-}
-
-a {
-  color: var(--toolbar-color);
-  text-decoration: none;
-}
->>>>>>> 98d0c17... feat: push base  code to repository

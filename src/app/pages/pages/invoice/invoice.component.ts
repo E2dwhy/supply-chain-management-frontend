@@ -21,29 +21,4 @@ export class InvoiceComponent implements OnInit {
   ngOnInit() {
   }
 
-<<<<<<< HEAD
-  print(): void {
-    let printContents, popupWin;
-    printContents = document.getElementById('print-section').innerHTML;
-    popupWin = window.open('', '_blank');
-    popupWin.document.open();
-    popupWin.document.write(`
-      <html>
-        <head>
-          <title></title>
-          <style>
-    
-    
-          </style>
-        </head>
-    <body onload="window.print();window.close()">
-        <div [innerHTML]="printContents"></div>
-    </body>
-      </html>`
-    );
-    popupWin.document.close();
-  }
-
-=======
->>>>>>> 98d0c17... feat: push base  code to repository
 }

@@ -13,11 +13,11 @@ import { map, catchError } from "rxjs/operators";
 export class AuthserviceService {
   constructor(private http: HttpClient) {}
 
-  login(phoneNumber, password): Observable<any> {
-    const url = "https://api.noworri.com/api/login";
+  login(email, password): Observable<any> {
+    const url = "http://127.0.0.1:8000/api/login";
     const body = {
-      phone_no: phoneNumber,
-      password: password,
+      email: email,
+      password,
     };
 
     return this.http.post(url, body).pipe(
@@ -32,10 +32,27 @@ export class AuthserviceService {
   }
 
   register(userData): Observable<any> {
-    const url = "https://api.noworri.com/api/register";
+    const url = "http://127.0.0.1:8000/api/register";
 
     return this.http
       .post(url, userData, { responseType: "json" })
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((error: HttpErrorResponse) => {
+          console.log("Error", error.message);
+          return observableThrowError(error);
+        })
+      );
+  }
+
+
+  getSummaryData(user_id: string): Observable<any> {
+    const url = `http://127.0.0.1:8000/api/getusersummarydata/${user_id}`;
+
+    return this.http
+      .get(url, { responseType: "json" })
       .pipe(
         map((response) => {
           return response;

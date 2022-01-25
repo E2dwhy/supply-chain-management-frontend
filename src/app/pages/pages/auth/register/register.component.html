@@ -2,7 +2,7 @@
   <div @fadeInUp class="card overflow-hidden w-full max-w-xs">
     <div class="p-6 pb-0" fxLayout="column" fxLayoutAlign="center center">
       <div class="fill-current text-center">
-        <img class="w-16" src="assets/img/demo/logo.svg">
+        <img class="w-16" src="assets/img/KachelanLogo.jpeg">
       </div>
     </div>
 
@@ -16,6 +16,11 @@
         <mat-form-field fxFlex="grow">
           <mat-label>Name</mat-label>
           <input formControlName="name" matInput required>
+        </mat-form-field>
+
+        <mat-form-field fxFlex="grow">
+          <mat-label>Phone Number</mat-label>
+          <input formControlName="phone_no" matInput required>
         </mat-form-field>
 
         <mat-form-field fxFlex="grow">
@@ -47,7 +52,7 @@
       <div fxLayout="row" fxLayoutAlign="center center">
         <mat-checkbox class="caption">I accept the <a>terms and conditions.</a></mat-checkbox>
       </div>
-      <button (click)="send()" color="primary" mat-raised-button type="button">
+      <button (click)="register()" color="primary" mat-raised-button type="button">
         CREATE ACCOUNT
       </button>
       <p class="text-secondary text-center">

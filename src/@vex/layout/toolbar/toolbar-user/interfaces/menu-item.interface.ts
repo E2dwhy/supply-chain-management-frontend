@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 import { Icon } from '@visurel/iconify-angular';
 
 export interface MenuItem {
@@ -9,15 +8,3 @@ export interface MenuItem {
   colorClass: string;
   route: string;
 }
-=======
-import { Icon } from '@visurel/iconify-angular';
-
-export interface MenuItem {
-  id: string;
-  icon: Icon;
-  label: string;
-  description: string;
-  colorClass: string;
-  route: string;
-}
->>>>>>> 98d0c17... feat: push base  code to repository

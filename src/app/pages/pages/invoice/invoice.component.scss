@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 @media print {
   .p-gutter {
     padding: 0 !important;
@@ -16,22 +15,3 @@
     padding-right: var(--padding);
   }
 }
-=======
-@media print {
-  .p-gutter {
-    padding: 0 !important;
-  }
-
-  .card {
-    box-shadow: none !important;
-  }
-}
-
-
-.table {
-  td {
-    padding-left: var(--padding);
-    padding-right: var(--padding);
-  }
-}
->>>>>>> 98d0c17... feat: push base  code to repository

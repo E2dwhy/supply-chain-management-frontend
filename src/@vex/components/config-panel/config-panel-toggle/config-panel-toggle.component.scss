@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .config-panel-toggle {
   bottom: var(--padding);
   position: fixed;
@@ -10,16 +9,3 @@
   left: var(--padding);
   right: unset;
 }
-=======
-.config-panel-toggle {
-  bottom: var(--padding);
-  position: fixed;
-  right: var(--padding);
-  z-index: 100;
-}
-
-::ng-deep [dir="rtl"] .config-panel-toggle {
-  left: var(--padding);
-  right: unset;
-}
->>>>>>> 98d0c17... feat: push base  code to repository

@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 .vex-mail-content-header {
   height: 56px;
 }
@@ -12,18 +11,3 @@
 :host {
   @apply flex flex-col flex-auto overflow-hidden;
 }
-=======
-.vex-mail-content-header {
-  height: 56px;
-}
-
-@screen lg {
-  .vex-mail-content-header {
-    height: 64px;
-  }
-}
-
-:host {
-  @apply flex flex-col flex-auto overflow-hidden;
-}
->>>>>>> 98d0c17... feat: push base  code to repository

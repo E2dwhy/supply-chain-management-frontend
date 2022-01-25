@@ -10,7 +10,7 @@
   <h2 class="display-2 font-bold mt-4 mb-2">{{ value }}</h2>
   <h3 class="subheading-2 font-medium text-secondary m-0">{{ label }}</h3>
 
-  <h4 [class.text-green]="change > 0"
+  <!-- <h4 [class.text-green]="change > 0"
       [class.text-red]="change <= 0"
       class="subheading-1 font-medium mt-4 mb-0">
     <ic-icon *ngIf="change > 0"
@@ -24,7 +24,7 @@
              height="20px"
              width="20px"></ic-icon>
     <span>{{ change }}%</span>
-  </h4>
+  </h4> -->
 
   <button *ngIf="helpText"
           [matTooltip]="helpText"
