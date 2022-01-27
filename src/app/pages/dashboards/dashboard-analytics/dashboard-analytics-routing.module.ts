@@ -6,8 +6,8 @@ import { DashboardAnalyticsComponent } from './dashboard-analytics.component';
 
 const routes: Routes = [
   {
-    path: '',
-    component: DashboardAnalyticsComponent
+    path: "",
+    component: DashboardAnalyticsComponent,
   }
 ];
 

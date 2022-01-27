@@ -60,14 +60,14 @@
                                  iconClass="text-deep-orange bg-deep-orange-light"
                                  gdColumn.lt-sm="1"
                                  helpText="Explain something"
-                                 label="Transactions"
-                                 value="{{ summaryData?.transactions }}"></vex-widget-quick-value-center>
+                                 label="Sales (NGN)"
+                                 value="{{ summaryData?.sales }}"></vex-widget-quick-value-center>
   <vex-widget-quick-value-center [change]="34.5"
                                  [icon]="icTimer"
                                  iconClass="text-teal bg-teal-light"
                                  gdColumn.lt-sm="1"
-                                 label="Stock"
-                                 value="{{ summarydata?.stock }}"></vex-widget-quick-value-center>
+                                 label="Products"
+                                 value="{{ summaryData?.products }}"></vex-widget-quick-value-center>
 
   <vex-widget-large-goal-chart [series]="salesSeries"
                                gdColumn="1 / -1"

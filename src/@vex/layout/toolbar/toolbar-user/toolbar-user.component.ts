@@ -12,9 +12,16 @@ export class ToolbarUserComponent implements OnInit {
 
   dropdownOpen: boolean;
   icPerson = icPerson;
+  userSessionData: any;
 
   constructor(private popover: PopoverService,
-              private cd: ChangeDetectorRef) { }
+              private cd: ChangeDetectorRef) { 
+                const user = localStorage.getItem('current_user');
+
+                if(user && user.length) {
+                  this.userSessionData = JSON.parse(user);
+                }
+              }
 
   ngOnInit() {
   }

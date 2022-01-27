@@ -106,7 +106,7 @@ export class DashboardAnalyticsComponent implements OnInit, OnDestroy {
     private cd: ChangeDetectorRef,
     private authService: AuthserviceService
   ) {
-    const userData = localStorage.getItem("currentUser");
+    const userData = localStorage.getItem("current_user");
     if (userData?.length) {
       this.userSessionData = JSON.parse(userData);
     }
@@ -129,7 +129,7 @@ export class DashboardAnalyticsComponent implements OnInit, OnDestroy {
 
   getUserSummaryData() {
     this.authService
-      .getSummaryData(this.userSessionData.user_id)
+      .getSummaryData(this.userSessionData?.user_id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((response) => {
         if (response["status"] === true) {

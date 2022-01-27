@@ -52,7 +52,7 @@ export class LoginComponent implements OnInit {
       if(response['status'] === true) {
         this.userData = response['user'];
         localStorage.setItem('current_user', JSON.stringify(this.userData));
-        this.router.navigate(['/dashboards/analytics']);
+        this.router.navigate(['/dashboards/home']);
       } else {
         this.hasError = true;
         this.errorMessage = 'Invalid email/password combination';

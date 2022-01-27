@@ -22,16 +22,16 @@ const routes: VexRoutes = [
     loadChildren: () => import('./pages/pages/coming-soon/coming-soon.module').then(m => m.ComingSoonModule),
   },
   {
-    path: '',
+    path: 'dashboards',
     component: CustomLayoutComponent,
     children: [
       {
-        path: 'dashboards/analytics',
+        path: 'dashboards/home',
         redirectTo: '/'
       },
       {
         path: '',
-        loadChildren: () => import('./pages/dashboards/dashboard-analytics/dashboard-analytics.module').then(m => m.DashboardAnalyticsModule),
+        loadChildren: () => import('./pages/dashboards/dashboards.module').then(m => m.DashboardsModule),
       },
       {
         path: 'apps',

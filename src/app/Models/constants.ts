@@ -33,6 +33,52 @@ export const PAYOUT_TABLE_LABELS = [
   },
 ];
 
+export const ORDER_STATUS_TABLE_LABELS = [
+  {
+    text: 'pending',
+    textClass: 'text-primary',
+    cssClasses: ['text-primary','bg-primary-light'],
+    bgClass: 'bg-primary-light',
+    previewClass: 'bg-primary'
+  },
+  {
+    text: 'approved',
+    cssClasses: ['text-purple','bg-purple-light'],
+    textClass: 'text-purple',
+    bgClass: 'bg-puple-light',
+    previewClass: 'bg-cyan'
+  },
+  {
+    text: 'supplied',
+    cssClasses: ['text-purple','bg-purple-light'],
+    textClass: 'text-purple',
+    bgClass: 'bg-puple-light',
+    previewClass: 'bg-cyan'
+  },
+  {
+    text: 'Completed',
+    textClass: 'text-green',
+    cssClasses: ['text-green','bg-cyan-light'],
+    bgClass: 'bg-cyan-light',
+    previewClass: 'bg-green'
+  },
+  {
+    text: 'Cancelled',
+    cssClasses: ['text-purple','bg-purple-light'],
+    textClass: 'text-purple',
+    bgClass: 'bg-puple-light',
+    previewClass: 'bg-cyan'
+  },
+];
+
+export const ROLES = [
+  'sales rep',
+  'admin',
+  'supervising officer',
+  'accountant',
+  'store manager'
+]
+
 export const TRANSACTION_TABLE_LABELS = [
   {
     text: 'Funds Withdrawn',

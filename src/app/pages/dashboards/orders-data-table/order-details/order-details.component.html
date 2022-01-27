@@ -1,0 +1,151 @@
+<vex-page-layout>
+  <vex-page-layout-header
+    class="pb-16"
+    fxLayout="column"
+    fxLayoutAlign="center start"
+  >
+    <div
+      [class.container]="layoutCtrl.value === 'boxed'"
+      [class.px-gutter]="layoutCtrl.value === 'fullwidth'"
+      class="w-full flex flex-col sm:flex-row justify-between"
+    >
+      <div>
+        <h1 class="title mt-0 mb-1">Order Details</h1>
+        <vex-breadcrumbs [crumbs]="['Dashboards', 'Orders', 'Order Details']"></vex-breadcrumbs>
+      </div>
+
+      <!-- <mat-button-toggle-group [formControl]="layoutCtrl" class="mt-4 sm:mt-0">
+        <mat-button-toggle value="boxed">BOXED</mat-button-toggle>
+        <mat-button-toggle value="fullwidth">FULL-WIDTH</mat-button-toggle>
+      </mat-button-toggle-group> -->
+    </div>
+  </vex-page-layout-header>
+
+  <vex-page-layout-content
+    [class.container]="layoutCtrl.value === 'boxed'"
+    [class.px-gutter]="layoutCtrl.value === 'fullwidth'"
+    class="-mt-6"
+  >
+    <div class="p-gutter container">
+      <div @fadeInUp class="card p-16">
+        <div fxLayout="row">
+          <div fxFlex="50%">
+            <img class="h-40" src="assets/img/KachelanLogo.jpeg" />
+
+            <div class="mt-12">
+              <h4 class="body-2 text-secondary mt-0">RECIPIENT</h4>
+              <h3 class="title m-0">{{ orderData.name }}</h3>
+              <div class="text-secondary">
+                <p class="m-0">{{ orderData.delivery_address }}</p>
+                <!-- <p class="m-0">Brooklyn, NY</p>
+                <p class="m-0">11203, USA</p> -->
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="text-right body-1"
+            fxFlex="50%"
+            fxLayout="column"
+            fxLayoutAlign="start end"
+          >
+            <h1 class="display-2 m-0">INVOICE</h1>
+
+            <table class="mt-6">
+              <tbody>
+                <tr>
+                  <td class="text-secondary body-2">INVOICE NO.</td>
+                  <td class="text-left pl-4">{{ orderData.id }}</td>
+                </tr>
+                <tr>
+                  <td class="text-secondary body-2">INVOICE DATE</td>
+                  <td class="text-left pl-4">{{ orderData.created_at | date }}</td>
+                </tr>
+                <!-- <tr>
+                  <td class="text-secondary body-2">PROJECT NO.</td>
+                  <td class="text-left pl-4">D-23-44</td>
+                </tr> -->
+              </tbody>
+            </table>
+
+            <div class="mt-12">
+              <h4 class="body-2 text-secondary mt-0">COMPANY</h4>
+              <h3 class="title m-0">KACHELAN</h3>
+              <div class="text-secondary">
+                <p class="m-0">Lagos</p>
+                <!-- <p class="m-0">Brooklyn, NY</p> -->
+                <p class="m-0">Nigeria</p>
+
+                <p class="m-0 mt-3">
+                  <ic-icon
+                    [icon]="icMail"
+                    class="mr-2"
+                    inline="true"
+                    size="1.25em"
+                  ></ic-icon>
+                  <span>wecare@kachelan.com</span>
+                </p>
+
+                <p class="m-0">
+                  <ic-icon
+                    [icon]="icPhone"
+                    class="mr-2"
+                    inline="true"
+                    size="1.25em"
+                  ></ic-icon>
+                  <span>+1 (961) 400-3535</span>
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <table class="table w-full mt-24">
+          <thead>
+            <tr>
+              <td class="body-2 text-secondary">ITEM</td>
+              <td class="body-2 text-secondary">PRICE PER</td>
+              <!-- <td class="body-2 text-secondary">UNIT</td> -->
+              <td class="body-2 text-secondary">QUANTITY</td>
+              <td class="body-2 text-secondary text-right">TOTAL</td>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of items; let i = index ">
+              <td class="py-6 border-b">
+               {{ item.name }}
+              </td>
+              <td class="py-6 border-b">{{item.unit_price}}</td>
+              <td class="py-6 border-b">40</td>
+              <td class="py-6 border-b font-medium text-right">₦{{item.price }}</td>
+            </tr>
+
+          </tbody>
+        </table>
+
+        <div class="mt-8" fxLayout="column" fxLayoutAlign="start end">
+          <table class="subheading-2 font-medium pr-6">
+            <tbody>
+              <!-- <tr>
+                <td class="text-secondary text-right">SUBTOTAL</td>
+                <td class="pl-12">₦2,299.94‬</td>
+              </tr> -->
+              <!-- <tr>
+                                    <td class="text-secondary text-right">TAX (19%)</td>
+                                    <td class="pl-12">$436.99‬</td>
+                                  </tr> -->
+              <tr>
+                <!-- <td class="text-secondary text-right">DISCOUNT (5%)</td> 
+                <td class="pl-12">-₦114.99‬</td> -->
+              </tr>
+              <tr>
+                <td class="headline font-medium text-right pt-6">TOTAL</td>
+                <td class="headline font-medium pl-12 pt-6">₦{{ orderData.total_amount }}‬</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </vex-page-layout-content>
+</vex-page-layout>

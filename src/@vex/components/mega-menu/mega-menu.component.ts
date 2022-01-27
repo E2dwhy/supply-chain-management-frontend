@@ -29,7 +29,7 @@ export class MegaMenuComponent implements OnInit {
     {
       icon: icLayers,
       label: 'Dashboard',
-      route: '/'
+      route: 'dashboards/home'
     },
     {
       icon: icAssigment,
@@ -63,6 +63,25 @@ export class MegaMenuComponent implements OnInit {
       label: 'All-In-One Table',
       route: '/apps/aio-table'
     },
+    
+    {
+      label: 'Orders',
+      route: 'dashboards/orders'
+    },
+
+    {
+      label: 'Order Details',
+      route: 'dashboards/orders/order-details'
+    },
+    {
+      label: 'Users',
+      route: 'dashboards/users'
+    },
+    {
+      label: 'Products',
+      route: 'dashboards/products'
+    },
+
     {
       label: 'Authentication',
       route: '/login'

@@ -34,34 +34,43 @@ export class AuthserviceService {
   register(userData): Observable<any> {
     const url = "http://127.0.0.1:8000/api/register";
 
-    return this.http
-      .post(url, userData, { responseType: "json" })
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((error: HttpErrorResponse) => {
-          console.log("Error", error.message);
-          return observableThrowError(error);
-        })
-      );
+    return this.http.post(url, userData, { responseType: "json" }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.log("Error", error.message);
+        return observableThrowError(error);
+      })
+    );
   }
-
 
   getSummaryData(user_id: string): Observable<any> {
     const url = `http://127.0.0.1:8000/api/getusersummarydata/${user_id}`;
 
-    return this.http
-      .get(url, { responseType: "json" })
-      .pipe(
-        map((response) => {
-          return response;
-        }),
-        catchError((error: HttpErrorResponse) => {
-          console.log("Error", error.message);
-          return observableThrowError(error);
-        })
-      );
+    return this.http.get(url, { responseType: "json" }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.log("Error", error.message);
+        return observableThrowError(error);
+      })
+    );
+  }
+
+  deleteUSer(user_id: any): Observable<any> {
+    const url = `http://127.0.0.1:8000/api/deleteuser/${user_id}`;
+
+    return this.http.delete(url, { responseType: "json" }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.log("Error", error.message);
+        return observableThrowError(error);
+      })
+    );
   }
 
   uploadPhoto(file: File, uid: string) {
@@ -118,6 +127,23 @@ export class AuthserviceService {
       );
   }
 
+  getUsersList(user_id): Observable<any> {
+    const url = `http://127.0.0.1:8000/api/getusers/${user_id}`;
+    let params = new HttpParams();
+    params = params.append("user_id", user_id);
+
+    return this.http
+      .get(url, { responseType: "json", params: params })
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((error: HttpErrorResponse) => {
+          console.log("Error", error.message);
+          return observableThrowError(error);
+        })
+      );
+  }
   getUserDetailsById(uid): Observable<any> {
     const url = "https://api.noworri.com/api/getuserbyid";
     let params = new HttpParams();
@@ -162,6 +188,20 @@ export class AuthserviceService {
     params = params.append("email", userData.email);
 
     return this.http.post(url, null, { responseType: "json", params }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.log("error", error.message);
+        return observableThrowError(error);
+      })
+    );
+  }
+
+  updateUser(userData) {
+    const url = `http://127.0.0.1:8000/api/updateuserrole`;
+
+    return this.http.put(url, userData, { responseType: "json" }).pipe(
       map((response) => {
         return response;
       }),
