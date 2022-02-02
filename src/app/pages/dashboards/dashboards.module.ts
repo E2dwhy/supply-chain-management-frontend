@@ -34,6 +34,17 @@ import { MatDividerModule } from "@angular/material/divider";
 import { MatFormFieldModule } from "@angular/material/form-field";
 import { MatInputModule } from "@angular/material/input";
 import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
+import { CustomersModalComponent } from "./customers/customers-modal/customers-modal.component";
+import { CustomersComponent } from "./customers/customers.component";
+import { OrdersReportComponent } from "./reports/orders-report/orders-report.component";
+import { MatSnackBarModule } from "@angular/material/snack-bar";
+import { MatDatepickerModule } from "@angular/material/datepicker";
+import { MatAutocompleteModule } from "@angular/material/autocomplete";
+import { MatNativeDateModule } from "@angular/material/core";
+import { MatRadioModule } from "@angular/material/radio";
+import { MatSlideToggleModule } from "@angular/material/slide-toggle";
+import { MatSliderModule } from "@angular/material/slider";
+import { SecondaryToolbarModule } from "src/@vex/components/secondary-toolbar/secondary-toolbar.module";
 
 @NgModule({
   imports: [
@@ -62,19 +73,36 @@ import { MatProgressSpinnerModule } from "@angular/material/progress-spinner";
     DashboardsRoutingModule,
     MatFormFieldModule,
     MatInputModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatSnackBarModule,
+    MatDatepickerModule,
+    FlexLayoutModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    IconModule,
+    MatSelectModule,
+    MatNativeDateModule,
+    MatAutocompleteModule,
+    MatSliderModule,
+    MatRadioModule,
+    MatSlideToggleModule,
+    SecondaryToolbarModule,
   ],
   declarations: [
     DashboardsComponent,
     ActivityLogsComponent,
     OrdersDataTableComponent,
     OrderDetailsComponent,
+    OrdersReportComponent,
     ProductsComponent,
     ProductModalComponent,
     UsersDataTableComponent,
     UserDetailsModalComponent,
     ReportsComponent,
-    OrderModalComponent
+    OrderModalComponent,
+    CustomersComponent,
+    CustomersModalComponent,
   ],
 })
 export class DashboardsModule {}

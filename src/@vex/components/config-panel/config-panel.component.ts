@@ -41,7 +41,7 @@ export class ConfigPanelComponent implements OnInit {
   icClose = icClose;
   ConfigName = ConfigName;
   Style = Style;
-  selectedColor = colorVariables.blue;
+  selectedColor = colorVariables.green;
 
   constructor(private configService: ConfigService,
               private styleService: StyleService,
@@ -50,6 +50,7 @@ export class ConfigPanelComponent implements OnInit {
               private route: ActivatedRoute) { }
 
   ngOnInit() {
+    this.selectedColor = colorVariables.green;
   }
 
   setConfig(layout: ConfigName, style: Style) {

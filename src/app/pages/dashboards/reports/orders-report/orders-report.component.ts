@@ -1,22 +1,35 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions } from '@angular/material/form-field';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSelectChange } from '@angular/material/select';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { ReplaySubject, Observable, Subject, of } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
-import { stagger40ms } from 'src/@vex/animations/stagger.animation';
-import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
-import { UserSession } from 'src/app/Models/interfaces';
-import { AuthserviceService } from 'src/app/services/authservice.service';
-import { aioTableLabels, aioTableData } from 'src/static-data/aio-table-data';
-import { CustomerCreateUpdateComponent } from '../../apps/aio-table/customer-create-update/customer-create-update.component';
-import { Customer } from '../../apps/aio-table/interfaces/customer.model';
+import { SelectionModel } from "@angular/cdk/collections";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import {
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  Validators,
+} from "@angular/forms";
+import {
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MatFormFieldDefaultOptions,
+} from "@angular/material/form-field";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSelectChange } from "@angular/material/select";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
+import { Router } from "@angular/router";
+import { ReplaySubject, Observable, Subject, of } from "rxjs";
+import { take, takeUntil } from "rxjs/operators";
+import { fadeInUp400ms } from "src/@vex/animations/fade-in-up.animation";
+import { stagger40ms } from "src/@vex/animations/stagger.animation";
+import { TableColumn } from "src/@vex/interfaces/table-column.interface";
+import {
+  ORDER_STATUS_TABLE_LABELS,
+  USER_ROLES,
+} from "src/app/Models/constants";
+import { UserSession } from "src/app/Models/interfaces";
+import { Customer } from "src/app/pages/apps/aio-table/interfaces/customer.model";
+import { AuthserviceService } from "src/app/services/authservice.service";
+import { OrdersService } from "src/app/services/orders.service";
+import { aioTableLabels, aioTableData } from "src/static-data/aio-table-data";
+import { OrderModalComponent } from "../../orders-data-table/order-modal/order-modal.component";
 import icEdit from "@iconify/icons-ic/twotone-edit";
 import icDelete from "@iconify/icons-ic/twotone-delete";
 import icSearch from "@iconify/icons-ic/twotone-search";
@@ -27,15 +40,15 @@ import icMail from "@iconify/icons-ic/twotone-mail";
 import icMap from "@iconify/icons-ic/twotone-map";
 import icMoreHoriz from "@iconify/icons-ic/twotone-more-horiz";
 import icFolder from "@iconify/icons-ic/twotone-folder";
-import { OrdersService } from 'src/app/services/orders.service';
-import { OrderModalComponent } from './order-modal/order-modal.component';
-import { Router } from '@angular/router';
-import { ORDER_STATUS_TABLE_LABELS } from 'src/app/Models/constants';
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { ProductsService } from "src/app/services/products.service";
+import icDateRange from "@iconify/icons-ic/twotone-date-range";
+import icPerson from "@iconify/icons-ic/twotone-person";
 
 @Component({
-  selector: 'vex-orders-data-table',
-  templateUrl: './orders-data-table.component.html',
-  styleUrls: ['./orders-data-table.component.scss'],
+  selector: "vex-orders-report",
+  templateUrl: "./orders-report.component.html",
+  styleUrls: ["./orders-report.component.scss"],
   animations: [fadeInUp400ms, stagger40ms],
   providers: [
     {
@@ -46,7 +59,7 @@ import { ORDER_STATUS_TABLE_LABELS } from 'src/app/Models/constants';
     },
   ],
 })
-export class OrdersDataTableComponent implements OnInit {
+export class OrdersReportComponent implements OnInit {
   layoutCtrl = new FormControl("boxed");
 
   /**
@@ -75,7 +88,12 @@ export class OrdersDataTableComponent implements OnInit {
       visible: true,
       cssClasses: ["font-medium"],
     },
-    { label: "Total Amount", property: "total_amount", type: "text", visible: false },
+    {
+      label: "Total Amount",
+      property: "total_amount",
+      type: "text",
+      visible: false,
+    },
     // { label: "Contact", property: "phone_no", type: "button", visible: true },
     {
       label: "Delivery Address",
@@ -110,11 +128,14 @@ export class OrdersDataTableComponent implements OnInit {
   icMap = icMap;
   icEdit = icEdit;
   icSearch = icSearch;
+  icPerson = icPerson;
   icDelete = icDelete;
   icAdd = icAdd;
   icFilterList = icFilterList;
   icMoreHoriz = icMoreHoriz;
   icFolder = icFolder;
+  icDateRange = icDateRange;
+  form: FormGroup;
 
   statusLabels = ORDER_STATUS_TABLE_LABELS;
 
@@ -124,12 +145,17 @@ export class OrdersDataTableComponent implements OnInit {
   hasError: boolean;
   errorMessage: string;
   isLoading: boolean;
+  customers: any;
+  users: any;
 
   constructor(
-    private dialog: MatDialog,
     private ordersService: OrdersService,
     private authService: AuthserviceService,
-    private router: Router
+    private router: Router,
+    private fb: FormBuilder,
+    private productsService: ProductsService,
+    private orderService: OrdersService,
+    private snackBar: MatSnackBar
   ) {
     const user = localStorage.getItem("current_user");
 
@@ -162,7 +188,14 @@ export class OrdersDataTableComponent implements OnInit {
     //   this.subject$.next(customers);
     // });
     this.getOrdersList();
-
+    this.getCustomersData();
+    this.getUsersData();
+    this.form = this.fb.group({
+      salesRepID: [""],
+      dateFrom: [""],
+      dateTo: [""],
+      customer: [""],
+    });
     // this.data$.pipe(
     //   filter<OrderSession[]>(Boolean)
     // ).subscribe(customers => {
@@ -175,23 +208,70 @@ export class OrdersDataTableComponent implements OnInit {
       .subscribe((value) => this.onFilterChange(value));
   }
 
-  getOrdersList() {
+  getOrdersList(filteredData = null) {
     this.isLoading = true;
     this.ordersService
       .getOrdersList(this.userSessionData?.user_id)
+      .pipe(take(1))
+      .subscribe((response) => {
+        this.isLoading = false;
+        if (response["status"] === true) {
+          if (filteredData) {
+            this.orders = filteredData.map((data) => {
+              data.status = this.getStatusLabel(data.status);
+              return data;
+            });
+            this.dataSource = new MatTableDataSource();
+            this.dataSource.data = filteredData;
+          } else {
+            this.orders = response["data"].map((data) => {
+              data.status = this.getStatusLabel(data.status);
+              return data;
+            });
+            this.dataSource = new MatTableDataSource();
+            this.dataSource.data = response["data"];  
+          }
+        } else {
+          this.hasError = true;
+          this.errorMessage = response["message"];
+        }
+      });
+  }
+
+  get isFormReady(): boolean {
+    return !!this.users && !!this.customers;
+  }
+
+  getCustomersData() {
+    this.isLoading = true;
+    this.authService
+      .getCustomersList(this.userSessionData?.user_id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((response) => {
         this.isLoading = false;
         if (response["status"] === true) {
-          this.orders = response['data'].map(data => {
-            data.status = this.getStatusLabel(data.status);
-            return data
-          });
-          this.dataSource = new MatTableDataSource();
-          this.dataSource.data = response["data"];
+          this.customers = response["data"];
         } else {
           this.hasError = true;
-          this.errorMessage = response['message'];
+          this.errorMessage = response["message"];
+        }
+      });
+  }
+
+  getUsersData() {
+    this.isLoading = true;
+    this.authService
+      .getUsersList(this.userSessionData?.user_id)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((response) => {
+        this.isLoading = false;
+        if (response["status"] === true) {
+          this.users = response["data"]?.filter(
+            (data) => data.role === USER_ROLES.SR
+          );
+        } else {
+          this.hasError = true;
+          this.errorMessage = response["message"];
         }
       });
   }
@@ -217,54 +297,43 @@ export class OrdersDataTableComponent implements OnInit {
   //   });
   // }
 
-  createOrder() {
-    this.dialog
-      .open(OrderModalComponent)
-      .afterClosed()
-      .subscribe((order: any) => {
-        /**
-         * Customer is the updated customer (if the order pressed Save - otherwise it's null)
-         */
-        if (order) {
-          /**
-           * Here we are updating our local array.
-           * You would probably make an HTTP request here.
-           */
-          this.getOrdersList();
-        }
-      });
-  }
-
-  updateOrder(order: any) {
-    this.dialog
-      .open(OrderModalComponent, {
-        data: order,
-      })
-      .afterClosed()
-      .subscribe((updatedOrder) => {
-        /**
-         * Customer is the updated customer (if the order pressed Save - otherwise it's null)
-         */
-        if (updatedOrder) {
-          /**
-           * Here we are updating our local array.
-           * You would probably make an HTTP request here.
-           */
-
-          this.getOrdersList();
-          // const index = this.orders.findIndex((existingOrder) => existingOrder.id === updatedOrder.id);
-          // this.orders[index] = updatedOrder;
-          // this.subject$.next(this.orders);
+  search() {
+    console.log(["[searchForm]", this.form.value]);
+    const from = new Date(this.form.value["dateFrom"])
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
+    const to = new Date(this.form.value["dateTo"])
+      .toISOString()
+      .slice(0, 19)
+      .replace("T", " ");
+    this.form.get("dateFrom").setValue(from);
+    this.form.get("dateTo").setValue(to);
+    this.isLoading = true;
+    this.ordersService
+      .searchOrders(this.userSessionData?.user_id, this.form.value)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((response) => {
+        this.isLoading = false;
+        if (response["data"] === true) {
+          this.dataSource = new MatTableDataSource();
+          this.dataSource.data = response["data"];
+          this.orders = response["data"];
+          this.getOrdersList(this.orders);
+        } else {
+          this.hasError = true;
+          this.errorMessage =
+            "No data Found for the specified search criteria. Please try with different data";
         }
       });
   }
 
   viewOrderDetails(order: any) {
-    this.router.navigate(['/dashboards/orders/order-details/' + order.id]);
+    this.router.navigate(["/dashboards/orders/order-details/" + order.id]);
   }
 
   getStatusLabel(status: string) {
-    console.log('status', status);
+    console.log("status", status);
     return this.statusLabels.find((label) => label.text === status);
   }
 
@@ -333,6 +402,4 @@ export class OrdersDataTableComponent implements OnInit {
     // this.orders[index].labels = change.value;
     // this.subject$.next(this.orders);
   }
-
-
 }

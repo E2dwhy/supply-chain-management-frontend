@@ -41,8 +41,23 @@ updateOrders(user_id, orderData): Observable<any> {
   );
 }
 
-updateOrdersStatus(orderData): Observable<any> {
+updateOrder(orderData): Observable<any> {
   const url = `http://127.0.0.1:8000/api/updateorder`;
+  let params = new HttpParams();
+
+  return this.http.put(url, orderData, { responseType: "json", params: params }).pipe(
+    map((response) => {
+      return response;
+    }),
+    catchError((error: HttpErrorResponse) => {
+      console.log("Error", error.message);
+      return observableThrowError(error);
+    })
+  );
+}
+
+updateOrderStatus(orderData): Observable<any> {
+  const url = `http://127.0.0.1:8000/api/updateorderstatus`;
   let params = new HttpParams();
 
   return this.http.put(url, orderData, { responseType: "json", params: params }).pipe(
@@ -62,6 +77,28 @@ updateOrdersStatus(orderData): Observable<any> {
   params = params.append("user_id", user_id);
 
   return this.http.delete(url, { responseType: "json", params: params }).pipe(
+    map((response) => {
+      return response;
+    }),
+    catchError((error: HttpErrorResponse) => {
+      console.log("Error", error.message);
+      return observableThrowError(error);
+    })
+  );
+}
+
+searchOrders(user_id, filterData): Observable<any> {
+  const url = `http://127.0.0.1:8000/api/searchorder/${user_id}`;
+  let params = new HttpParams();
+  // params = params.append("user_id", user_id);
+  params = params.append("customer", filterData.customer);
+  params = params.append("salesRepID", filterData.salesRepID);
+  params = params.append("dateFrom", filterData.dateFrom);
+  params = params.append("dateTo", filterData.dateTo);
+
+
+
+  return this.http.get(url, { responseType: "json", params: params }).pipe(
     map((response) => {
       return response;
     }),

@@ -26,8 +26,8 @@ const routes: VexRoutes = [
     component: CustomLayoutComponent,
     children: [
       {
-        path: 'dashboards/home',
-        redirectTo: '/'
+        path: 'home',
+        loadChildren: () => import('./pages/dashboards/dashboard-analytics/dashboard-analytics.module').then(m => m.DashboardAnalyticsModule),
       },
       {
         path: '',

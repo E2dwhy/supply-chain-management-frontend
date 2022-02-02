@@ -36,6 +36,8 @@ import icChromeReaderMode from "@iconify/icons-ic/twotone-chrome-reader-mode";
 import { ConfigName } from "../@vex/interfaces/config-name.model";
 import icMail from "@iconify/icons-ic/twotone-mail";
 import icMoney from "@iconify/icons-ic/twotone-money";
+import icPerson from "@iconify/icons-ic/twotone-person";
+import { colorVariables } from "src/@vex/components/config-panel/color-variables";
 @Component({
   selector: "vex-root",
   templateUrl: "./app.component.html",
@@ -44,7 +46,8 @@ import icMoney from "@iconify/icons-ic/twotone-money";
 export class AppComponent {
   title = "vex";
   userSessionData: any;
-
+  colorVariables = colorVariables;
+  color = colorVariables.green
   constructor(
     private configService: ConfigService,
     private styleService: StyleService,
@@ -68,12 +71,20 @@ export class AppComponent {
 
     if (user && user.length) {
       this.userSessionData = JSON.parse(user);
-      if(!this.userSessionData?.user_id) {
-        this.router.navigate(['/login'])
+      if (!this.userSessionData?.user_id) {
+        this.router.navigate(["/login"]);
       }
     } else {
-      this.router.navigate(['/login'])
+      this.router.navigate(["/login"]);
     }
+
+    
+
+    if (this.document) {
+      this.document.documentElement.style.setProperty('--color-primary', this.color.default.replace('rgb(', '').replace(')', ''));
+      this.document.documentElement.style.setProperty('--color-primary-contrast', this.color.contrast.replace('rgb(', '').replace(')', ''));
+    }
+
     /**
      * Customize the template to your needs with the ConfigService
      * Example:
@@ -124,7 +135,7 @@ export class AppComponent {
       {
         type: "link",
         label: "Dashboard",
-        route: "/",
+        route: "/dashboards/home",
         icon: icLayers,
         routerLinkActiveOptions: { exact: true },
       },
@@ -151,13 +162,35 @@ export class AppComponent {
         label: "Users",
         route: "/dashboards/users",
         icon: icContacts,
+        permission: "admin",
       },
       {
         type: "link",
-        label: "Activity Logs ",
-        route: "/dashboards/activity-logs",
-        icon: icLock,
+        label: "customers ",
+        route: "/dashboards/customers",
+        icon: icPerson,
+        permission: "admin",
       },
+      {
+        type: "dropdown",
+        label: "Reports",
+        icon: icAssessment,
+        permission: "admin",
+        children: [
+          {
+            type: "link",
+            label: "orders",
+            route: "/dashboards/reports/orders",
+          },
+        ],
+      },
+      // {
+      //   type: "link",
+      //   label: "Activity Logs ",
+      //   route: "/dashboards/activity-logs",
+      //   icon: icLock,
+      //   permission: 'admin'
+      // },
 
       // {
       //   type: 'subheading',

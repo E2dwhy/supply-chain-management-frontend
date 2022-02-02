@@ -108,9 +108,16 @@ export class ToolbarUserDropdownComponent implements OnInit {
   icVerifiedUser = icVerifiedUser;
   icLock = icLock;
   icNotificationsOff = icNotificationsOff;
+  userSessionData: any;
 
   constructor(private cd: ChangeDetectorRef,
-              private popoverRef: PopoverRef<ToolbarUserDropdownComponent>) { }
+              private popoverRef: PopoverRef<ToolbarUserDropdownComponent>) {
+                const user = localStorage.getItem("current_user");
+
+    if (user && user.length) {
+      this.userSessionData = JSON.parse(user);
+    }
+               }
 
   ngOnInit() {
   }

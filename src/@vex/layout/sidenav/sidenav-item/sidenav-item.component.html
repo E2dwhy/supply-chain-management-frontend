@@ -1,4 +1,4 @@
-<a *ngIf="isLink(item) && !isFunction(item.route)"
+<a *ngIf="isLink(item) && !isFunction(item.route) && shouldDisplay"
    [fragment]="item.fragment"
    [routerLinkActiveOptions]="item.routerLinkActiveOptions || { exact: false }"
    [routerLink]="item.route"

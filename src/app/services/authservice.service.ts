@@ -144,6 +144,25 @@ export class AuthserviceService {
         })
       );
   }
+
+  getCustomersList(user_id): Observable<any> {
+    const url = `http://127.0.0.1:8000/api/getcustomers/${user_id}`;
+    let params = new HttpParams();
+    params = params.append("user_id", user_id);
+
+    return this.http
+      .get(url, { responseType: "json", params: params })
+      .pipe(
+        map((response) => {
+          return response;
+        }),
+        catchError((error: HttpErrorResponse) => {
+          console.log("Error", error.message);
+          return observableThrowError(error);
+        })
+      );
+  }
+
   getUserDetailsById(uid): Observable<any> {
     const url = "https://api.noworri.com/api/getuserbyid";
     let params = new HttpParams();
@@ -202,6 +221,34 @@ export class AuthserviceService {
     const url = `http://127.0.0.1:8000/api/updateuserrole`;
 
     return this.http.put(url, userData, { responseType: "json" }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.log("error", error.message);
+        return observableThrowError(error);
+      })
+    );
+  }
+
+  addCustomer(customerData) {
+    const url = `http://127.0.0.1:8000/api/addcustomer`;
+
+    return this.http.post(url, customerData, { responseType: "json" }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.log("error", error.message);
+        return observableThrowError(error);
+      })
+    );
+  }
+
+  updateCustomer(customerData, user_id) {
+    const url = `http://127.0.0.1:8000/api/updatecustomer/${user_id}`;
+
+    return this.http.put(url, customerData, { responseType: "json" }).pipe(
       map((response) => {
         return response;
       }),

@@ -15,6 +15,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ProductsService } from "src/app/services/products.service";
 import { take } from "rxjs/operators";
 import { OrdersService } from "src/app/services/orders.service";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "vex-order-modal",
@@ -50,13 +51,15 @@ export class OrderModalComponent implements OnInit {
   userSessionData: any;
   hasError: boolean;
   errorMessage: any;
+  selectedProduct: any;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public orderData: any,
     private dialogRef: MatDialogRef<OrderModalComponent>,
     private fb: FormBuilder,
     private productsService: ProductsService,
-    private orderService: OrdersService
+    private orderService: OrdersService,
+    private snackBar: MatSnackBar
   ) {
     const user = localStorage.getItem("current_user");
 
@@ -91,6 +94,7 @@ export class OrderModalComponent implements OnInit {
       qty: ['', Validators.required],
       price: ['', Validators.required],
       unit_price: [''],
+      product_id: ['']
     });
   }
 
@@ -132,12 +136,20 @@ export class OrderModalComponent implements OnInit {
     .subscribe((response) => {
       if (response["status"] === true) {
         this.products = response["data"];
+        this.openSnackbar(response['message']);
         this.dialogRef.close(order);
       } else {
 
         this.hasError = true;
         this.errorMessage = response['message'];
       }
+    });
+  }
+
+  openSnackbar(message) {
+    this.snackBar.open(message, 'CLOSE', {
+      duration: 3000,
+      horizontalPosition: 'right'
     });
   }
 
@@ -168,8 +180,8 @@ export class OrderModalComponent implements OnInit {
   }
 
   getPrice(change, index) {
-   const selectedProduct = this.products.find(product => product.name === change.value);
-   const price = selectedProduct?.price;
+   this.selectedProduct = this.products.find(product => product.name === change.value);
+   const price = this.selectedProduct?.price;
    this.items = this.form.get('items') as FormArray;
    this.items.controls[index].get('price').setValue(price);
    this.items.controls[index].get('unit_price').setValue(price);
@@ -181,6 +193,7 @@ export class OrderModalComponent implements OnInit {
     const price = this.items.controls[index].get('price').value;
     const newPrice = price * qty;
     this.items.controls[index].get('price').setValue(parseFloat(`${newPrice}`));
+    this.items.controls[index].get('product_id').setValue(parseInt(`${this.selectedProduct.id}`));
     this.getTotalOrder()
   }
 

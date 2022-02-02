@@ -43,7 +43,14 @@ export const ORDER_STATUS_TABLE_LABELS = [
   },
   {
     text: 'approved',
-    cssClasses: ['text-purple','bg-purple-light'],
+    cssClasses: ['text-green','bg-purple-light'],
+    textClass: 'text-purple',
+    bgClass: 'bg-puple-light',
+    previewClass: 'bg-cyan'
+  },
+  {
+    text: 'billed',
+    cssClasses: ['text-reen','bg-purple-light'],
     textClass: 'text-purple',
     bgClass: 'bg-puple-light',
     previewClass: 'bg-cyan'
@@ -56,22 +63,45 @@ export const ORDER_STATUS_TABLE_LABELS = [
     previewClass: 'bg-cyan'
   },
   {
-    text: 'Completed',
+    text: 'completed',
     textClass: 'text-green',
     cssClasses: ['text-green','bg-cyan-light'],
     bgClass: 'bg-cyan-light',
     previewClass: 'bg-green'
   },
   {
-    text: 'Cancelled',
-    cssClasses: ['text-purple','bg-purple-light'],
+    text: 'cancelled',
+    cssClasses: ['text-red','bg-purple-light'],
+    textClass: 'text-purple',
+    bgClass: 'bg-puple-light',
+    previewClass: 'bg-cyan'
+  },
+  {
+    text: 'rejected',
+    cssClasses: ['text-red','bg-purple-light'],
+    textClass: 'text-purple',
+    bgClass: 'bg-puple-light',
+    previewClass: 'bg-cyan'
+  },
+  {
+    text: 'bill-rejected',
+    cssClasses: ['text-red','bg-purple-light'],
     textClass: 'text-purple',
     bgClass: 'bg-puple-light',
     previewClass: 'bg-cyan'
   },
 ];
 
-export const ROLES = [
+export enum USER_ROLES {
+  SALES ='sales rep',
+  ADMIKN = 'admin',
+  SO = 'supervising officer',
+  ACC = 'accountant',
+  SM = 'store manager',
+  SR = 'sales rep'
+}
+
+export const USER_ROLES_LIST = [
   'sales rep',
   'admin',
   'supervising officer',

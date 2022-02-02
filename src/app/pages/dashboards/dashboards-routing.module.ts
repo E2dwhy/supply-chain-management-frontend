@@ -3,10 +3,12 @@ import { Routes, RouterModule } from '@angular/router';
 import { QuicklinkModule } from 'ngx-quicklink';
 import { ForgotPasswordComponent } from '../pages/auth/forgot-password/forgot-password.component';
 import { ActivityLogsComponent } from './activity-logs/activity-logs.component';
+import { CustomersComponent } from './customers/customers.component';
 import { DashboardAnalyticsComponent } from './dashboard-analytics/dashboard-analytics.component';
 import { OrderDetailsComponent } from './orders-data-table/order-details/order-details.component';
 import { OrdersDataTableComponent } from './orders-data-table/orders-data-table.component';
 import { ProductsComponent } from './products/products.component';
+import { OrdersReportComponent } from './reports/orders-report/orders-report.component';
 import { ReportsComponent } from './reports/reports.component';
 import { UsersDataTableComponent } from './users-data-table/users-data-table.component';
 
@@ -40,12 +42,25 @@ const routes: Routes = [
         component: UsersDataTableComponent,
       },
       {
+        path: "customers",
+        component: CustomersComponent,
+      },
+      {
         path: "activity-logs",
         component: ActivityLogsComponent,
       },
       {
         path: "reports",
-        component: ReportsComponent,
+        children: [
+          {
+            path: "",
+            component: OrdersDataTableComponent,
+          },
+          {
+            path: "orders",
+            component: OrdersReportComponent,
+          },
+        ],
       },
       {
         path: "forgot-password",

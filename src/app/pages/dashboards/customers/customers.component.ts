@@ -1,22 +1,4 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions } from '@angular/material/form-field';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSelectChange } from '@angular/material/select';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { ReplaySubject, Observable, Subject, of } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
-import { stagger40ms } from 'src/@vex/animations/stagger.animation';
-import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
-import { UserSession } from 'src/app/Models/interfaces';
-import { AuthserviceService } from 'src/app/services/authservice.service';
-import { aioTableLabels, aioTableData } from 'src/static-data/aio-table-data';
-import { CustomerCreateUpdateComponent } from '../../apps/aio-table/customer-create-update/customer-create-update.component';
-import { Customer } from '../../apps/aio-table/interfaces/customer.model';
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
 import icEdit from "@iconify/icons-ic/twotone-edit";
 import icDelete from "@iconify/icons-ic/twotone-delete";
 import icSearch from "@iconify/icons-ic/twotone-search";
@@ -27,15 +9,33 @@ import icMail from "@iconify/icons-ic/twotone-mail";
 import icMap from "@iconify/icons-ic/twotone-map";
 import icMoreHoriz from "@iconify/icons-ic/twotone-more-horiz";
 import icFolder from "@iconify/icons-ic/twotone-folder";
-import { OrdersService } from 'src/app/services/orders.service';
-import { OrderModalComponent } from './order-modal/order-modal.component';
-import { Router } from '@angular/router';
-import { ORDER_STATUS_TABLE_LABELS } from 'src/app/Models/constants';
+import { SelectionModel } from "@angular/cdk/collections";
+import { FormControl } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
+import {
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MatFormFieldDefaultOptions,
+} from "@angular/material/form-field";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSelectChange } from "@angular/material/select";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
+import { ReplaySubject, Observable, Subject, of } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import { fadeInUp400ms } from "src/@vex/animations/fade-in-up.animation";
+import { stagger40ms } from "src/@vex/animations/stagger.animation";
+import { TableColumn } from "src/@vex/interfaces/table-column.interface";
+import { UserSession } from "src/app/Models/interfaces";
+import { AuthserviceService } from "src/app/services/authservice.service";
+import { aioTableLabels, aioTableData } from "src/static-data/aio-table-data";
+import { Customer } from "../../apps/aio-table/interfaces/customer.model";
+import { UserDetailsModalComponent } from "../users-data-table/user-details-modal/user-details-modal.component";
+import { CustomersModalComponent } from "./customers-modal/customers-modal.component";
 
 @Component({
-  selector: 'vex-orders-data-table',
-  templateUrl: './orders-data-table.component.html',
-  styleUrls: ['./orders-data-table.component.scss'],
+  selector: "vex-customers",
+  templateUrl: "./customers.component.html",
+  styleUrls: ["./customers.component.scss"],
   animations: [fadeInUp400ms, stagger40ms],
   providers: [
     {
@@ -46,7 +46,7 @@ import { ORDER_STATUS_TABLE_LABELS } from 'src/app/Models/constants';
     },
   ],
 })
-export class OrdersDataTableComponent implements OnInit {
+export class CustomersComponent implements OnInit {
   layoutCtrl = new FormControl("boxed");
 
   /**
@@ -55,42 +55,41 @@ export class OrdersDataTableComponent implements OnInit {
    */
   subject$: ReplaySubject<Customer[]> = new ReplaySubject<Customer[]>(1);
   data$: Observable<Customer[]> = this.subject$.asObservable();
-  orders: UserSession[];
+  customers: any[];
   unsubscribe$ = new Subject();
   @Input()
   columns: TableColumn<Customer>[] = [
     // { label: 'Checkbox', property: 'checkbox', type: 'checkbox', visible: true },
-    { label: "Order ID", property: "id", type: "text", visible: true },
+    { label: "Customer ID", property: "customer_id", type: "text", visible: true },
     {
-      label: "date",
+      label: "Full Name",
+      property: "full_name",
+      type: "text",
+      visible: true,
+      cssClasses: ["font-medium"],
+    },
+    { label: "email", property: "email", type: "text", visible: false },
+    // { label: "Contact", property: "phone_no", type: "button", visible: true },
+    {
+      label: "address",
+      property: "address",
+      type: "text",
+      visible: true,
+      cssClasses: ["text-secondary", "font-medium"],
+    },
+    {
+      label: "Creation Date",
       property: "created_at",
       type: "text",
       visible: true,
       cssClasses: ["text-secondary", "font-medium"],
     },
-    {
-      label: "Name",
-      property: "name",
-      type: "text",
-      visible: true,
-      cssClasses: ["font-medium"],
-    },
-    { label: "Total Amount", property: "total_amount", type: "text", visible: false },
-    // { label: "Contact", property: "phone_no", type: "button", visible: true },
-    {
-      label: "Delivery Address",
-      property: "delivery_address",
-      type: "text",
-      visible: true,
-      cssClasses: ["text-secondary", "font-medium"],
-    },
-
     // { label: 'Zipcode', property: 'zipcode', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
     // { label: 'City', property: 'city', type: 'text', visible: false, cssClasses: ['text-secondary', 'font-medium'] },
     {
-      label: "Status",
-      property: "status",
-      type: "badge",
+      label: "Phone",
+      property: "phone_no",
+      type: "text",
       visible: true,
       cssClasses: ["text-secondary", "font-medium"],
     },
@@ -116,8 +115,6 @@ export class OrdersDataTableComponent implements OnInit {
   icMoreHoriz = icMoreHoriz;
   icFolder = icFolder;
 
-  statusLabels = ORDER_STATUS_TABLE_LABELS;
-
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   userSessionData: any;
@@ -127,9 +124,7 @@ export class OrdersDataTableComponent implements OnInit {
 
   constructor(
     private dialog: MatDialog,
-    private ordersService: OrdersService,
-    private authService: AuthserviceService,
-    private router: Router
+    private authService: AuthserviceService
   ) {
     const user = localStorage.getItem("current_user");
 
@@ -161,12 +156,12 @@ export class OrdersDataTableComponent implements OnInit {
     // this.getData().subscribe(customers => {
     //   this.subject$.next(customers);
     // });
-    this.getOrdersList();
+    this.getCustomersData();
 
     // this.data$.pipe(
-    //   filter<OrderSession[]>(Boolean)
+    //   filter<CustomerSession[]>(Boolean)
     // ).subscribe(customers => {
-    //   this.orders = customers;
+    //   this.users = customers;
     //   this.dataSource.data = customers;
     // });
 
@@ -175,23 +170,21 @@ export class OrdersDataTableComponent implements OnInit {
       .subscribe((value) => this.onFilterChange(value));
   }
 
-  getOrdersList() {
+  getCustomersData() {
     this.isLoading = true;
-    this.ordersService
-      .getOrdersList(this.userSessionData?.user_id)
+    this.authService
+      .getCustomersList(this.userSessionData?.user_id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((response) => {
         this.isLoading = false;
         if (response["status"] === true) {
-          this.orders = response['data'].map(data => {
-            data.status = this.getStatusLabel(data.status);
-            return data
-          });
+          this.customers = response["data"];
           this.dataSource = new MatTableDataSource();
           this.dataSource.data = response["data"];
+          console.log("[datasource.data]", this.dataSource.data);
         } else {
           this.hasError = true;
-          this.errorMessage = response['message'];
+          this.errorMessage = response["message"];
         }
       });
   }
@@ -204,85 +197,76 @@ export class OrdersDataTableComponent implements OnInit {
   // createCustomer() {
   //   this.dialog.open(CustomerCreateUpdateComponent).afterClosed().subscribe((customer: Customer) => {
   //     /**
-  //      * Customer is the updated customer (if the order pressed Save - otherwise it's null)
+  //      * Customer is the updated customer (if the user pressed Save - otherwise it's null)
   //      */
   //     if (customer) {
   //       /**
   //        * Here we are updating our local array.
   //        * You would probably make an HTTP request here.
   //        */
-  //       this.orders.unshift(new Customer(customer));
-  //       this.subject$.next(this.orders);
+  //       this.users.unshift(new Customer(customer));
+  //       this.subject$.next(this.users);
   //     }
   //   });
   // }
 
-  createOrder() {
+  createCustomer() {
     this.dialog
-      .open(OrderModalComponent)
+      .open(CustomersModalComponent)
       .afterClosed()
-      .subscribe((order: any) => {
+      .subscribe((user: any) => {
+        this.getCustomersData();
         /**
-         * Customer is the updated customer (if the order pressed Save - otherwise it's null)
+         * Customer is the updated customer (if the user pressed Save - otherwise it's null)
          */
-        if (order) {
+        if (user) {
           /**
            * Here we are updating our local array.
            * You would probably make an HTTP request here.
            */
-          this.getOrdersList();
         }
       });
   }
 
-  updateOrder(order: any) {
+  updateCustomer(user: any) {
     this.dialog
-      .open(OrderModalComponent, {
-        data: order,
+      .open(CustomersModalComponent, {
+        data: user,
       })
       .afterClosed()
-      .subscribe((updatedOrder) => {
+      .subscribe((updatedCustomer) => {
         /**
-         * Customer is the updated customer (if the order pressed Save - otherwise it's null)
+         * Customer is the updated customer (if the user pressed Save - otherwise it's null)
          */
-        if (updatedOrder) {
+        if (updatedCustomer) {
           /**
            * Here we are updating our local array.
            * You would probably make an HTTP request here.
            */
 
-          this.getOrdersList();
-          // const index = this.orders.findIndex((existingOrder) => existingOrder.id === updatedOrder.id);
-          // this.orders[index] = updatedOrder;
-          // this.subject$.next(this.orders);
+          this.getCustomersData();
+          // const index = this.users.findIndex((existingCustomer) => existingCustomer.id === updatedCustomer.id);
+          // this.users[index] = updatedCustomer;
+          // this.subject$.next(this.users);
         }
       });
   }
 
-  viewOrderDetails(order: any) {
-    this.router.navigate(['/dashboards/orders/order-details/' + order.id]);
-  }
-
-  getStatusLabel(status: string) {
-    console.log('status', status);
-    return this.statusLabels.find((label) => label.text === status);
-  }
-
-  deleteOrder(order: any) {
+  deleteCustomer(user: any) {
     /**
      * Here we are updating our local array.
      * You would probably make an HTTP request here.
      */
-    // this.orders.splice(this.orders.findIndex((existingCustomer) => existingCustomer.id === order.id), 1);
-    // this.selection.deselect(order);
-    // this.subject$.next(this.orders);
+    // this.users.splice(this.users.findIndex((existingCustomer) => existingCustomer.id === user.id), 1);
+    // this.selection.deselect(user);
+    // this.subject$.next(this.users);
 
-    this.ordersService
-      .deleteOrder(this.userSessionData?.user_id, order.id)
+    this.authService
+      .deleteUSer(user.id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((response) => {
         if (response["data"] === true) {
-          this.getOrdersList();
+          this.getCustomersData();
         }
       });
   }
@@ -292,7 +276,7 @@ export class OrdersDataTableComponent implements OnInit {
      * Here we are updating our local array.
      * You would probably make an HTTP request here.
      */
-    customers.forEach((c) => this.deleteOrder(c));
+    customers.forEach((c) => this.deleteCustomer(c));
   }
 
   onFilterChange(value: string) {
@@ -329,10 +313,8 @@ export class OrdersDataTableComponent implements OnInit {
   }
 
   onLabelChange(change: MatSelectChange, row: Customer) {
-    // const index = this.orders.findIndex(c => c === row);
-    // this.orders[index].labels = change.value;
-    // this.subject$.next(this.orders);
+    // const index = this.users.findIndex(c => c === row);
+    // this.users[index].labels = change.value;
+    // this.subject$.next(this.users);
   }
-
-
 }

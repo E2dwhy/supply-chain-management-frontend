@@ -4,27 +4,17 @@
 
     <h2 *ngIf="form?.get('full_name').value" class="headline m-0" fxFlex="auto">
       <!-- {{ form.get('full_name').value + 's profile  }} -->
-      User Profile
+      Customer Profile
     </h2>
     <h2 *ngIf="!form?.get('full_name').value" class="headline m-0" fxFlex="auto">
-      New User
+      New Customer
     </h2>
 
-    <button
-      [matMenuTriggerFor]="settingsMenu"
-      class="text-secondary"
-      mat-icon-button
-      type="button"
-    >
+    <!-- <button [matMenuTriggerFor]="settingsMenu" class="text-secondary" mat-icon-button type="button">
       <mat-icon [icIcon]="icMoreVert"></mat-icon>
-    </button>
+    </button> -->
 
-    <button
-      class="text-secondary"
-      mat-dialog-close
-      mat-icon-button
-      type="button"
-    >
+    <button class="text-secondary" mat-dialog-close mat-icon-button type="button">
       <mat-icon [icIcon]="icClose"></mat-icon>
     </button>
   </div>
@@ -35,64 +25,50 @@
     <div class="flex flex-col sm:flex-row">
       <mat-form-field class="mt-6 flex-auto">
         <mat-label>Full Name</mat-label>
-        <input cdkFocusInitial formControlName="full_name" matInput [disabled]="isUpdateMode()"/>
+        <input cdkFocusInitial formControlName="full_name" matInput />
 
         <mat-icon [icIcon]="icPerson" class="mr-3" matPrefix></mat-icon>
       </mat-form-field>
     </div>
     <mat-form-field class="flex-auto">
       <mat-label>email</mat-label>
-      <input formControlName="email" matInput [disabled]="isUpdateMode()" />
+      <input formControlName="email" matInput />
 
       <mat-icon [icIcon]="icEmail" class="mr-3" matPrefix></mat-icon>
     </mat-form-field>
+
     <mat-form-field class="flex-auto">
-      <mat-label>Role</mat-label>
-      <mat-select placeholder="Country" formControlName="role">
-        <mat-option *ngFor="let role of roleOptions" id="newAttributeRole" [value]="role">
-          {{ role }}
-        </mat-option>
-      </mat-select>
-      <mat-icon [icIcon]="icPerson" class="mr-3" matPrefix></mat-icon>
+      <mat-label>Address</mat-label>
+      <input formControlName="address" matInput />
+
+      <mat-icon [icIcon]="icMyLocation" class="mr-3" matPrefix></mat-icon>
     </mat-form-field>
 
     <mat-form-field class="flex-auto">
       <mat-label>Phone Number</mat-label>
-      <input formControlName="phone_no" matInput [disabled]="isUpdateMode()" />
+      <input formControlName="phone_no" matInput />
 
       <mat-icon [icIcon]="icPhone" class="mr-3" matPrefix></mat-icon>
     </mat-form-field>
-    
-    <mat-form-field *ngIf="form.get('url').value && isCreateMode()" class="flex-auto">
-      <mat-label>URL </mat-label>
-      <input #url formControlName="url" matInput readonly/>
-      <button
-      mat-icon-button
-      matSuffix
-      matTooltip="Copy to send to a user"
-      (click)="copyInputMessage(url)"
-    >
-      <ic-icon [icon]="icCopy"></ic-icon>
-    </button>
-    </mat-form-field>
+
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">
     <button mat-button mat-dialog-close type="button">CANCEL</button>
     <button *ngIf="isCreateMode()" color="primary" mat-button type="submit" [disabled]="form.invalid">
-      INVITE USER
+      ADD CUSTOMER
     </button>
     <button *ngIf="isUpdateMode()" color="primary" mat-button type="submit" [disabled]="form.invalid">
-      UPDATE USER
+      UPDATE CUSTOMER
     </button>
   </mat-dialog-actions>
 </form>
 
-<mat-menu #settingsMenu="matMenu" xPosition="before" yPosition="below">
-  <!-- <button mat-menu-item>
+<!-- <mat-menu #settingsMenu="matMenu" xPosition="before" yPosition="below">
+  <! -- <button mat-menu-item>
     <mat-icon [icIcon]="icPrint"></mat-icon>
     <span>Print</span>
-  </button> -->
+  </button> -- >
 
   <button mat-menu-item>
     <mat-icon [icIcon]="icDownload"></mat-icon>
@@ -103,4 +79,4 @@
     <mat-icon [icIcon]="icDelete"></mat-icon>
     <span>Delete</span>
   </button>
-</mat-menu>
+</mat-menu> -->

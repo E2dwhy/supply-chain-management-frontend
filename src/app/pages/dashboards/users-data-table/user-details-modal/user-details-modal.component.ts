@@ -51,7 +51,8 @@ export class UserDetailsModalComponent implements OnInit {
     'admin',
     'accountant',
     'manager',
-    'customer'
+    'sales rep',
+    'supply manager'
   ]
   userSessionData: any;
 

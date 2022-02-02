@@ -36,6 +36,8 @@
     "apexcharts": "~3.25.0",
     "date-fns": "~2.19.0",
     "highlight.js": "~10.6.0",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.0",
     "luxon": "~1.26.0",
     "ngx-quicklink": "~0.2.7",
     "ngx-quill": "~13.2.0",

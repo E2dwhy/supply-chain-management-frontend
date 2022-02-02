@@ -27,10 +27,17 @@ export class SidenavItemComponent implements OnInit, OnChanges {
   isLink = this.navigationService.isLink;
   isDropdown = this.navigationService.isDropdown;
   isSubheading = this.navigationService.isSubheading;
+  userSessionData: any;
 
   constructor(private router: Router,
               private cd: ChangeDetectorRef,
-              private navigationService: NavigationService) { }
+              private navigationService: NavigationService) {
+                const user = localStorage.getItem("current_user");
+
+                if (user && user.length) {
+                  this.userSessionData = JSON.parse(user);
+                }
+               }
 
   @HostBinding('class')
   get levelClass() {
@@ -53,6 +60,14 @@ export class SidenavItemComponent implements OnInit, OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     if (changes && changes.hasOwnProperty('item') && this.isDropdown(this.item)) {
       this.onRouteChange();
+    }
+  }
+
+  get shouldDisplay() {
+    if(this.item.permission) {
+      return  this.item.permission === this.userSessionData.role;
+    } else {
+      return true
     }
   }
 
