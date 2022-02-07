@@ -27,12 +27,30 @@
   </div>
 
   <mat-divider class="-mx-6 text-border"></mat-divider>
-
+  <div *ngIf="!isFormReady" class="card overflow-auto -mt-16">
+    <div
+      style="
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background: white;
+      "
+    >
+      <mat-spinner color="primary"> </mat-spinner>
+    </div>
+  </div>
   <mat-dialog-content fxLayout="column">
     <div class="flex flex-col sm:flex-row">
       <mat-form-field class="mt-6 flex-auto" required>
-        <mat-label>Name</mat-label>
-        <input cdkFocusInitial formControlName="name" matInput />
+        <mat-label>Customer Name</mat-label>
+        <mat-select  (selectionChange)="setSelectedCustomerData($event)" placeholder="Item Name" formControlName="name">
+          <mat-option disabled selected id="newAttributeName" [value]="">
+            Select a customer
+          </mat-option>
+          <mat-option *ngFor="let customer of customers; let i = index" id="newAttributeItem" [value]="customer | json">
+            {{ customer.full_name }}
+          </mat-option>
+        </mat-select>
 
         <mat-icon [icIcon]="icPerson" class="mr-3" matPrefix></mat-icon>
       </mat-form-field>

@@ -11,7 +11,9 @@
     >
       <div>
         <h1 class="title mt-0 mb-1">Orders</h1>
-        <vex-breadcrumbs [crumbs]="['Dashboards', 'Orders']"></vex-breadcrumbs>
+        <vex-breadcrumbs
+          [crumbs]="['Dashboards', 'reports', 'Orders']"
+        ></vex-breadcrumbs>
       </div>
 
       <!-- <mat-button-toggle-group [formControl]="layoutCtrl" class="mt-4 sm:mt-0">
@@ -64,6 +66,7 @@
                       placeholder="Sales Rep"
                       formControlName="salesRepID"
                     >
+                    <mat-option [value]=""> Select Sales Rep </mat-option>
                       <mat-option
                         *ngFor="let user of users"
                         id="newAttributeUser"
@@ -86,6 +89,7 @@
                       placeholder="Customer"
                       formControlName="customer"
                     >
+                      <mat-option [value]=""> Select Customer </mat-option>
                       <mat-option
                         *ngFor="let customer of customers"
                         id="newAttributeCustomer"
@@ -153,99 +157,6 @@
         </div>
       </div>
     </div>
-    <!-- <div class="card overflow-auto -mt-16">
-      <div
-      class="bg-app-bar px-6 h-16 border-b sticky left-0"
-      fxLayout="row"
-      fxLayoutAlign="start center"
-      >
-        <form (ngSubmit)="search()" [formGroup]="form">
-          <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
-
-            <h3 class="headline m-0" fxFlex="auto">
-              Search Form
-            </h3>
-          </div>
-
-          <mat-divider class="-mx-6 text-border"></mat-divider>
-
-          <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
-            <div fxLayout="column" class="card" fxFlex="auto">
-              <div class="flex flex-col sm:flex-row">
-                <mat-form-field class="flex-auto">
-                  <mat-label>Sales Rep</mat-label>
-                  <input formControlName="salesRep" matInput />
-
-                  <mat-icon
-                    [icIcon]="icPerson"
-                    class="mr-3"
-                    matPrefix
-                  ></mat-icon>
-                </mat-form-field>
-
-                <mat-form-field class="sm:ml-6 flex-auto">
-                  <mat-label>Customer</mat-label>
-                  <input formControlName="customer" matInput />
-
-                  <mat-icon
-                    [icIcon]="icPerson"
-                    class="mr-3"
-                    matPrefix
-                  ></mat-icon>
-                </mat-form-field>
-              </div>
-              <div class="flex flex-col sm:flex-row">
-                <mat-form-field>
-                  <mat-label>From</mat-label>
-                  <input
-                    formControlName="dateFrom"
-                    [matDatepicker]="datepickerRefa"
-                    matInput
-                  />
-                  <mat-datepicker-toggle
-                    [for]="datepickerRefa"
-                    matSuffix
-                  ></mat-datepicker-toggle>
-                  <mat-datepicker #datepickerRefa></mat-datepicker>
-                  <mat-hint
-                    >Click on the icon to the right for a Datepicker</mat-hint
-                  >
-                </mat-form-field>
-                <mat-form-field>
-                  <mat-label>To</mat-label>
-                  <input
-                    [matDatepicker]="datepickerRefb"
-                    formControlName="dateTo"
-                    matInput
-                  />
-                  <mat-datepicker-toggle
-                    [for]="datepickerRefb"
-                    matSuffix
-                  ></mat-datepicker-toggle>
-                  <mat-datepicker #datepickerRefb></mat-datepicker>
-                  <mat-hint
-                    >Click on the icon to the right for a Datepicker</mat-hint
-                  >
-                </mat-form-field>
-              </div>
-            </div>
-
-            <div align="end">
-              <button
-                *ngIf="search()"
-                color="primary"
-                mat-button
-                type="submit"
-                [disabled]="form.invalid"
-              >
-                SEARCH
-                <mat-icon [icIcon]="icSearch" class="mr-3" matPrefix></mat-icon>
-              </button>
-            </div>
-          </div>
-        </form>
-      </div>
-    </div> -->
     <br />
     <br />
     <br />

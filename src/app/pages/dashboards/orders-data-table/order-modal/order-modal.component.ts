@@ -13,9 +13,11 @@ import icAdd from "@iconify/icons-ic/twotone-add";
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { ProductsService } from "src/app/services/products.service";
-import { take } from "rxjs/operators";
+import { take, takeUntil } from "rxjs/operators";
 import { OrdersService } from "src/app/services/orders.service";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { Subject } from "rxjs";
+import { AuthserviceService } from "src/app/services/authservice.service";
 
 @Component({
   selector: "vex-order-modal",
@@ -25,13 +27,12 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 export class OrderModalComponent implements OnInit {
   static id = 100;
 
-
   fieldArray: Array<any> = [];
   newAttribute: any = {};
 
   form: FormGroup;
   items: FormArray;
-  
+
   mode: "create" | "update" = "create";
 
   icMoreVert = icMoreVert;
@@ -52,6 +53,10 @@ export class OrderModalComponent implements OnInit {
   hasError: boolean;
   errorMessage: any;
   selectedProduct: any;
+  isLoading: boolean;
+  unsubscribe$ = new Subject();
+  customers: any;
+  isFormReady: boolean;
 
   constructor(
     @Inject(MAT_DIALOG_DATA) public orderData: any,
@@ -59,6 +64,7 @@ export class OrderModalComponent implements OnInit {
     private fb: FormBuilder,
     private productsService: ProductsService,
     private orderService: OrdersService,
+    private authService: AuthserviceService,
     private snackBar: MatSnackBar
   ) {
     const user = localStorage.getItem("current_user");
@@ -66,11 +72,11 @@ export class OrderModalComponent implements OnInit {
     if (user && user.length) {
       this.userSessionData = JSON.parse(user);
     }
-
   }
 
   ngOnInit() {
     this.getProductsList();
+    this.getCustomersData();
     if (this.orderData) {
       this.mode = "update";
     } else {
@@ -81,8 +87,11 @@ export class OrderModalComponent implements OnInit {
       id: this.orderData.id || "",
       // imageSrc: this.orderData.imageSrc,
       name: [this.orderData?.name || "", Validators.required],
-      items: this.fb.array([ this.createItem() ]),
-      delivery_address: [this.orderData?.delivery_address || "", Validators.required],
+      items: this.fb.array([this.createItem()]),
+      delivery_address: [
+        this.orderData?.delivery_address || "",
+        Validators.required,
+      ],
       total_amount: this.orderData?.qty || "",
       phone_no: [this.orderData.phone_no || "", Validators.required],
     });
@@ -90,11 +99,11 @@ export class OrderModalComponent implements OnInit {
 
   createItem(): FormGroup {
     return this.fb.group({
-      name: ['', Validators.required],
-      qty: ['', Validators.required],
-      price: ['', Validators.required],
-      unit_price: [''],
-      product_id: ['']
+      name: ["", Validators.required],
+      qty: ["", Validators.required],
+      price: ["", Validators.required],
+      unit_price: [""],
+      product_id: [""],
     });
   }
 
@@ -112,12 +121,12 @@ export class OrderModalComponent implements OnInit {
   }
 
   addItem(): void {
-    this.items = this.form.get('items') as FormArray;
+    this.items = this.form.get("items") as FormArray;
     this.items.push(this.createItem());
   }
 
   deleteFieldValue(index) {
-    this.items = this.form.get('items') as FormArray;
+    this.items = this.form.get("items") as FormArray;
     this.items.value[index].delete();
   }
 
@@ -131,25 +140,24 @@ export class OrderModalComponent implements OnInit {
     // this.dialogRef.close(order);
     // order.items = JSON.stringify(order.items)
     this.orderService
-    .addOrders(order)
-    .pipe(take(1))
-    .subscribe((response) => {
-      if (response["status"] === true) {
-        this.products = response["data"];
-        this.openSnackbar(response['message']);
-        this.dialogRef.close(order);
-      } else {
-
-        this.hasError = true;
-        this.errorMessage = response['message'];
-      }
-    });
+      .addOrders(order)
+      .pipe(take(1))
+      .subscribe((response) => {
+        if (response["status"] === true) {
+          this.products = response["data"];
+          this.openSnackbar(response["message"]);
+          this.dialogRef.close(order);
+        } else {
+          this.hasError = true;
+          this.errorMessage = response["message"];
+        }
+      });
   }
 
   openSnackbar(message) {
-    this.snackBar.open(message, 'CLOSE', {
+    this.snackBar.open(message, "CLOSE", {
       duration: 3000,
-      horizontalPosition: 'right'
+      horizontalPosition: "right",
     });
   }
 
@@ -158,18 +166,18 @@ export class OrderModalComponent implements OnInit {
     order.id = this.orderData.id;
 
     this.orderService
-    .addOrders(order)
-    .pipe(take(1))
-    .subscribe((response) => {
-      if (response["status"] === true) {
-        this.products = response["data"];
-        this.dialogRef.close(order);
-      } else {
-
-        this.hasError = true;
-        this.errorMessage = response['message'];
-      }
-    });  }
+      .addOrders(order)
+      .pipe(take(1))
+      .subscribe((response) => {
+        if (response["status"] === true) {
+          this.products = response["data"];
+          this.dialogRef.close(order);
+        } else {
+          this.hasError = true;
+          this.errorMessage = response["message"];
+        }
+      });
+  }
 
   isCreateMode() {
     return this.mode === "create";
@@ -180,30 +188,33 @@ export class OrderModalComponent implements OnInit {
   }
 
   getPrice(change, index) {
-   this.selectedProduct = this.products.find(product => product.name === change.value);
-   const price = this.selectedProduct?.price;
-   this.items = this.form.get('items') as FormArray;
-   this.items.controls[index].get('price').setValue(price);
-   this.items.controls[index].get('unit_price').setValue(price);
+    this.selectedProduct = this.products.find(
+      (product) => product.name === change.value
+    );
+    const price = this.selectedProduct?.price;
+    this.items = this.form.get("items") as FormArray;
+    this.items.controls[index].get("price").setValue(price);
+    this.items.controls[index].get("unit_price").setValue(price);
   }
 
   updatePrice(event, index) {
     const qty = event.target.value;
-    this.items = this.form.get('items') as FormArray;
-    const price = this.items.controls[index].get('price').value;
+    this.items = this.form.get("items") as FormArray;
+    const price = this.items.controls[index].get("price").value;
     const newPrice = price * qty;
-    this.items.controls[index].get('price').setValue(parseFloat(`${newPrice}`));
-    this.items.controls[index].get('product_id').setValue(parseInt(`${this.selectedProduct.id}`));
-    this.getTotalOrder()
+    this.items.controls[index].get("price").setValue(parseFloat(`${newPrice}`));
+    this.items.controls[index]
+      .get("product_id")
+      .setValue(parseInt(`${this.selectedProduct.id}`));
+    this.getTotalOrder();
   }
 
   getTotalOrder() {
-    this.items = this.form.get('items') as FormArray;
-    const prices = this.items.value.map(item => item.price);
+    this.items = this.form.get("items") as FormArray;
+    const prices = this.items.value.map((item) => item.price);
     const total = prices.reduce((acc, cur) => acc + cur, 0);
-    this.form.get('total_amount').setValue(total);
+    this.form.get("total_amount").setValue(total);
   }
-
 
   getProductsList() {
     this.productsService
@@ -219,6 +230,28 @@ export class OrderModalComponent implements OnInit {
       });
   }
 
+  getCustomersData() {
+    this.isLoading = true;
+    this.authService
+      .getCustomersList(this.userSessionData?.user_id)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((response) => {
+        this.isLoading = false;
+        this.isFormReady = true;
+        if (response["status"] === true) {
+          this.customers = response["data"];
+        } else {
+          this.hasError = true;
+          this.errorMessage = response["message"];
+        }
+      });
+  }
 
+  setSelectedCustomerData(event) {
+    const selectedCustomer = JSON.parse(event.value);
+    this.form.get('delivery_address').setValue(selectedCustomer.address)
+    this.form.get('phone_no').setValue(selectedCustomer.phone_no)
+    this.form.get('name').setValue(selectedCustomer.full_name)
 
+  }
 }

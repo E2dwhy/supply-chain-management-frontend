@@ -208,6 +208,15 @@ export class OrdersReportComponent implements OnInit {
       .subscribe((value) => this.onFilterChange(value));
   }
 
+  resetForm() {
+    this.form = this.fb.group({
+      salesRepID: [""],
+      dateFrom: [""],
+      dateTo: [""],
+      customer: [""],
+    });
+  }
+
   getOrdersList(filteredData = null) {
     this.isLoading = true;
     this.ordersService
@@ -216,21 +225,12 @@ export class OrdersReportComponent implements OnInit {
       .subscribe((response) => {
         this.isLoading = false;
         if (response["status"] === true) {
-          if (filteredData) {
-            this.orders = filteredData.map((data) => {
-              data.status = this.getStatusLabel(data.status);
-              return data;
-            });
-            this.dataSource = new MatTableDataSource();
-            this.dataSource.data = filteredData;
-          } else {
             this.orders = response["data"].map((data) => {
               data.status = this.getStatusLabel(data.status);
               return data;
             });
             this.dataSource = new MatTableDataSource();
-            this.dataSource.data = response["data"];  
-          }
+            this.dataSource.data = this.orders;
         } else {
           this.hasError = true;
           this.errorMessage = response["message"];
@@ -299,27 +299,34 @@ export class OrdersReportComponent implements OnInit {
 
   search() {
     console.log(["[searchForm]", this.form.value]);
-    const from = new Date(this.form.value["dateFrom"])
-      .toISOString()
-      .slice(0, 19)
-      .replace("T", " ");
-    const to = new Date(this.form.value["dateTo"])
-      .toISOString()
-      .slice(0, 19)
-      .replace("T", " ");
-    this.form.get("dateFrom").setValue(from);
-    this.form.get("dateTo").setValue(to);
+    if (this.form.value["dateFrom"] && this.form.value["dateTo"]) {
+      const from = new Date(this.form.value["dateFrom"])
+        .toISOString()
+        .slice(0, 19)
+        .replace("T", " ");
+      const to = new Date(this.form.value["dateTo"])
+        .toISOString()
+        .slice(0, 19)
+        .replace("T", " ");
+      // this.form.get("dateFrom").setValue(from);
+      // this.form.get("dateTo").setValue(to);
+      this.form.value['dateFrom'] = from;
+      this.form.value['dateTo'] = to;
+    }
+
     this.isLoading = true;
     this.ordersService
       .searchOrders(this.userSessionData?.user_id, this.form.value)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((response) => {
         this.isLoading = false;
-        if (response["data"] === true) {
+        if (response["status"] === true) {
+          this.orders = response["data"].map((data) => {
+            data.status = this.getStatusLabel(data.status);
+            return data;
+          });
           this.dataSource = new MatTableDataSource();
-          this.dataSource.data = response["data"];
-          this.orders = response["data"];
-          this.getOrdersList(this.orders);
+          this.dataSource.data = this.orders;
         } else {
           this.hasError = true;
           this.errorMessage =
