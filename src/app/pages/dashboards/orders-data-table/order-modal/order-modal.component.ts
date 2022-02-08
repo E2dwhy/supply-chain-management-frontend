@@ -93,6 +93,7 @@ export class OrderModalComponent implements OnInit {
         Validators.required,
       ],
       total_amount: this.orderData?.qty || "",
+      discount: this.orderData?.discount || "",
       phone_no: [this.orderData.phone_no || "", Validators.required],
     });
   }
@@ -159,6 +160,14 @@ export class OrderModalComponent implements OnInit {
       duration: 3000,
       horizontalPosition: "right",
     });
+  }
+
+  onApplyDiscount(event) {
+    console.log('[event]', event);
+    const discountAmount = event.target.value;
+    console.log('[discount]', discountAmount);
+    const updatedTotal = this.form.value['total_amount'] - discountAmount;
+    this.form.get('total_amount').setValue(updatedTotal);
   }
 
   updateOrder() {

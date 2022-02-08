@@ -33,6 +33,7 @@ export class OrderDetailsComponent implements OnInit {
   hasError: boolean;
   errorMessage: any;
   orderID: any;
+  showDiscount: boolean = true;
 
   
   selection = new SelectionModel<any>(true, []);

@@ -1,5 +1,5 @@
 import { SelectionModel } from "@angular/cdk/collections";
-import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { Component, Input, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -44,7 +44,8 @@ import { MatSnackBar } from "@angular/material/snack-bar";
 import { ProductsService } from "src/app/services/products.service";
 import icDateRange from "@iconify/icons-ic/twotone-date-range";
 import icPerson from "@iconify/icons-ic/twotone-person";
-
+import icRefresh from "@iconify/icons-ic/twotone-refresh";
+import icBook from "@iconify/icons-ic/twotone-book";
 @Component({
   selector: "vex-orders-report",
   templateUrl: "./orders-report.component.html",
@@ -59,7 +60,7 @@ import icPerson from "@iconify/icons-ic/twotone-person";
     },
   ],
 })
-export class OrdersReportComponent implements OnInit {
+export class OrdersReportComponent implements OnInit, OnDestroy {
   layoutCtrl = new FormControl("boxed");
 
   /**
@@ -135,6 +136,8 @@ export class OrdersReportComponent implements OnInit {
   icMoreHoriz = icMoreHoriz;
   icFolder = icFolder;
   icDateRange = icDateRange;
+  icBook = icBook
+  icRefresh = icRefresh;
   form: FormGroup;
 
   statusLabels = ORDER_STATUS_TABLE_LABELS;
@@ -147,6 +150,7 @@ export class OrdersReportComponent implements OnInit {
   isLoading: boolean;
   customers: any;
   users: any;
+  products: any;
 
   constructor(
     private ordersService: OrdersService,
@@ -190,11 +194,13 @@ export class OrdersReportComponent implements OnInit {
     this.getOrdersList();
     this.getCustomersData();
     this.getUsersData();
+    this.getProductsList();
     this.form = this.fb.group({
       salesRepID: [""],
       dateFrom: [""],
       dateTo: [""],
       customer: [""],
+      productID: [""],
     });
     // this.data$.pipe(
     //   filter<OrderSession[]>(Boolean)
@@ -214,7 +220,24 @@ export class OrdersReportComponent implements OnInit {
       dateFrom: [""],
       dateTo: [""],
       customer: [""],
+      productID: [""]
     });
+  }
+
+  getProductsList() {
+    this.isLoading = true;
+    this.productsService
+      .getProductsList(this.userSessionData?.user_id)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((response) => {
+        this.isLoading = false;
+        if (response["status"] === true) {
+          this.products = response["data"];
+        } else {
+          // this.hasError = true;
+          // this.errorMessage = response['message'];
+        }
+      });
   }
 
   getOrdersList(filteredData = null) {

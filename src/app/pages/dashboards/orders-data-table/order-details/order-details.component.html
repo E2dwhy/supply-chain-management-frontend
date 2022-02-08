@@ -32,7 +32,7 @@
       <div fxLAyout="row">
         <button (click)="exportAsPDF()" mat-menu-item>
           <mat-icon [icIcon]="icPrint"></mat-icon>
-          <span>Print</span>
+          <span>Download PDF</span>
           <mat-spinner *ngIf="isExporting" color="primary"> </mat-spinner>
         </button>
         <button
@@ -48,27 +48,37 @@
           <span>Approve</span>
         </button>
         <button
-        *ngIf="
-          userSessionData.role === 'admin' ||
-          userSessionData.role === 'supervising officer' ||
-          userSessionData.role === 'accountant'
-        "
-        (click)="markAsCompleted(userSessionData.role)"
-        mat-menu-item
-      >
-        <mat-icon [icIcon]="icCheck"></mat-icon>
-        <span>Complete Order</span>
-      </button>
-        <button
-        *ngIf="
+          *ngIf="
             userSessionData.role === 'admin' ||
             userSessionData.role === 'supervising officer' ||
             userSessionData.role === 'accountant'
           "
-         (click)="rejectOrder(userSessionData.role)" mat-menu-item>
+          (click)="markAsCompleted(userSessionData.role)"
+          mat-menu-item
+        >
+          <mat-icon [icIcon]="icCheck"></mat-icon>
+          <span>Complete Order</span>
+        </button>
+        <button
+          *ngIf="
+            userSessionData.role === 'admin' ||
+            userSessionData.role === 'supervising officer' ||
+            userSessionData.role === 'accountant'
+          "
+          (click)="rejectOrder(userSessionData.role)"
+          mat-menu-item
+        >
           <mat-icon [icIcon]="icDelete"></mat-icon>
           <span>Deny</span>
         </button>
+      </div>
+      <div fxLayout="row">
+        <mat-checkbox
+          (change)="showDiscount = !showDiscount"
+          [checked]="true"
+          color="primary"
+          >Show Discount</mat-checkbox
+        >
       </div>
       <div id="invoice" @fadeInUp class="card p-16">
         <div fxLayout="row">
@@ -189,9 +199,9 @@
                                     <td class="text-secondary text-right">TAX (19%)</td>
                                     <td class="pl-12">$436.99‬</td>
                                   </tr> -->
-              <tr>
-                <!-- <td class="text-secondary text-right">DISCOUNT (5%)</td> 
-                <td class="pl-12">-₦114.99‬</td> -->
+              <tr *ngIf="showDiscount">
+                <td class="text-secondary text-right">DISCOUNT</td>
+                <td class="pl-12">-₦{{ orderData.discount }}‬</td>
               </tr>
               <tr>
                 <td class="headline font-medium text-right pt-6">TOTAL</td>

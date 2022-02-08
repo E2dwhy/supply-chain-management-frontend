@@ -146,7 +146,12 @@
       </div>
     </tbody>
   </table>
+  <mat-form-field class="flex-auto">
+    <mat-label>Discount</mat-label>
+    <input (change)="onApplyDiscount($event)" cdkFocusInitial formControlName="discount" matInput />
 
+    <mat-icon class="mr-3" matPrefix>₦</mat-icon>
+  </mat-form-field>
   <mat-form-field class="flex-auto">
     <mat-label>Total</mat-label>
     <input readonly cdkFocusInitial formControlName="total_amount" disabled matInput />

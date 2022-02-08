@@ -144,7 +144,7 @@ export class AppComponent {
         type: "link",
         label: "Orders",
         route: "/dashboards/orders",
-        icon: icMoney,
+        icon: icReceipt,
         // badge: {
         //   value: '0',
         //   textClass: 'text-teal',
@@ -155,7 +155,7 @@ export class AppComponent {
         type: "link",
         label: "products",
         route: "/dashboards/products",
-        icon: icReceipt,
+        icon: icBook,
       },
       {
         type: "link",
