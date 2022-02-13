@@ -5,7 +5,8 @@
     <!-- <h2 *ngIf="form.get('firstName').value || form.get('lastName').value"
         class="headline m-0"
         fxFlex="auto">{{ form.get('firstName').value + ' ' + form.get('lastName').value }}</h2> -->
-    <h2 class="headline m-0" fxFlex="auto">New Order</h2>
+    <h2 *ngIf="isCreateMode()" class="headline m-0" fxFlex="auto">New Order</h2>
+    <h2 *ngIf="isUpdateMode()" class="headline m-0" fxFlex="auto">Update Order</h2>
 
     <button
       [matMenuTriggerFor]="settingsMenu"
@@ -133,6 +134,11 @@
               <input readonly matInput formControlName="price" placeholder="Price" />
             </mat-form-field>
           </td>
+          <td>
+            <mat-form-field>
+              <input  matInput (change)="onApplyPProductDiscount($event, i)" formControlName="product_discount" placeholder="Discount" type="number"/>
+            </mat-form-field>
+          </td>
           <!-- <td>
             <button
               class="btn btn-default"
@@ -146,12 +152,12 @@
       </div>
     </tbody>
   </table>
-  <mat-form-field class="flex-auto">
+  <!-- <mat-form-field class="flex-auto">
     <mat-label>Discount</mat-label>
     <input (change)="onApplyDiscount($event)" cdkFocusInitial formControlName="discount" matInput />
 
     <mat-icon class="mr-3" matPrefix>₦</mat-icon>
-  </mat-form-field>
+  </mat-form-field> -->
   <mat-form-field class="flex-auto">
     <mat-label>Total</mat-label>
     <input readonly cdkFocusInitial formControlName="total_amount" disabled matInput />

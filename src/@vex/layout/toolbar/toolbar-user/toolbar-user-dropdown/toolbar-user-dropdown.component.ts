@@ -42,7 +42,7 @@ export class ToolbarUserDropdownComponent implements OnInit {
       label: 'My Profile',
       description: 'Personal Information',
       colorClass: 'text-teal',
-      route: '/apps/social'
+      route: '/'
     },
     // {
     //   id: '2',

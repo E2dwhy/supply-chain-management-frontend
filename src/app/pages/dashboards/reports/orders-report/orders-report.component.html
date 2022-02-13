@@ -284,7 +284,18 @@
           <mat-icon [icIcon]="icFilterList"></mat-icon>
         </button>
       </div>
-
+      <div *ngIf="isLoading" class="card overflow-auto -mt-16">
+        <div
+          style="
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: white;
+          "
+        >
+          <mat-spinner color="primary"> </mat-spinner>
+        </div>
+      </div>
       <table
         @stagger
         [dataSource]="dataSource"
@@ -377,18 +388,7 @@
           mat-row
         ></tr>
       </table>
-      <div *ngIf="isLoading" class="card overflow-auto -mt-16">
-        <div
-          style="
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background: white;
-          "
-        >
-          <mat-spinner color="primary"> </mat-spinner>
-        </div>
-      </div>
+     
       <mat-paginator
         [pageSizeOptions]="pageSizeOptions"
         [pageSize]="pageSize"

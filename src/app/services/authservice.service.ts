@@ -59,6 +59,20 @@ export class AuthserviceService {
     );
   }
 
+  getSalesData(user_id: string): Observable<any> {
+    const url = `http://127.0.0.1:8000/api/getmonthlysales/${user_id}`;
+
+    return this.http.get(url, { responseType: "json" }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.log("Error", error.message);
+        return observableThrowError(error);
+      })
+    );
+  }
+
   deleteUSer(user_id: any): Observable<any> {
     const url = `http://127.0.0.1:8000/api/deleteuser/${user_id}`;
 

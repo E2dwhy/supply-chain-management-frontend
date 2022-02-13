@@ -1,5 +1,5 @@
 import { NgModule } from "@angular/core";
-import { CommonModule } from "@angular/common";
+import { CommonModule, DatePipe } from "@angular/common";
 import { DashboardsComponent } from "./dashboards.component";
 import { ActivityLogsComponent } from "./activity-logs/activity-logs.component";
 import { OrderDetailsComponent } from "./orders-data-table/order-details/order-details.component";
@@ -104,5 +104,6 @@ import { SecondaryToolbarModule } from "src/@vex/components/secondary-toolbar/se
     CustomersComponent,
     CustomersModalComponent,
   ],
+  providers: [DatePipe]
 })
 export class DashboardsModule {}

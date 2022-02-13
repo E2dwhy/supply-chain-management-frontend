@@ -222,6 +222,7 @@ export class OrdersReportComponent implements OnInit, OnDestroy {
       customer: [""],
       productID: [""]
     });
+    this.getOrdersList();
   }
 
   getProductsList() {

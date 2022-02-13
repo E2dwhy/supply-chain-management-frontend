@@ -90,7 +90,7 @@ updateOrderStatus(orderData): Observable<any> {
 searchOrders(user_id, filterData): Observable<any> {
   const url = `http://127.0.0.1:8000/api/searchorder/${user_id}`;
   let params = new HttpParams();
-  // params = params.append("user_id", user_id);
+  params = params.append("productID", filterData.productID);
   params = params.append("customer", filterData.customer);
   params = params.append("salesRepID", filterData.salesRepID);
   params = params.append("dateFrom", filterData.dateFrom);

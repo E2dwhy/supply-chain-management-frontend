@@ -31,6 +31,7 @@ import { OrdersService } from 'src/app/services/orders.service';
 import { OrderModalComponent } from './order-modal/order-modal.component';
 import { Router } from '@angular/router';
 import { ORDER_STATUS_TABLE_LABELS } from 'src/app/Models/constants';
+import { DatePipe } from '@angular/common';
 
 @Component({
   selector: 'vex-orders-data-table',
@@ -129,7 +130,8 @@ export class OrdersDataTableComponent implements OnInit {
     private dialog: MatDialog,
     private ordersService: OrdersService,
     private authService: AuthserviceService,
-    private router: Router
+    private router: Router,
+    public datePipe: DatePipe
   ) {
     const user = localStorage.getItem("current_user");
 
@@ -185,6 +187,7 @@ export class OrdersDataTableComponent implements OnInit {
         if (response["status"] === true) {
           this.orders = response['data'].map(data => {
             data.status = this.getStatusLabel(data.status);
+            data.created_at = this.datePipe.transform(data.created_at, 'short')
             return data
           });
           this.dataSource = new MatTableDataSource();

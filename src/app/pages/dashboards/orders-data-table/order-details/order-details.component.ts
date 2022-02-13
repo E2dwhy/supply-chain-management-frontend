@@ -1,7 +1,7 @@
 import { SelectionModel } from "@angular/cdk/collections";
 import { Component, OnInit } from "@angular/core";
 import { FormControl } from "@angular/forms";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import icMail from "@iconify/icons-ic/twotone-mail";
 import icPhone from "@iconify/icons-ic/twotone-phone";
 import icPrint from "@iconify/icons-ic/twotone-print";
@@ -46,6 +46,7 @@ export class OrderDetailsComponent implements OnInit {
   constructor(
     private orderService: OrdersService,
     private route: ActivatedRoute,
+    private router: Router,
     private snackBar: MatSnackBar
   ) {
     const user = localStorage.getItem("current_user");
@@ -91,6 +92,7 @@ export class OrderDetailsComponent implements OnInit {
         this.orderData = response["data"];
         this.openSnackbar('Order approved successfully!')
         this.items = JSON.parse(this.orderData?.items);
+        this.router.navigate(['/dashboards/orders']);
       } else {
         this.hasError = true;
         this.errorMessage = response["message"];
@@ -110,6 +112,7 @@ export class OrderDetailsComponent implements OnInit {
         this.orderData = response["data"];
         this.openSnackbar('Order Completed successfully!')
         this.items = JSON.parse(this.orderData?.items);
+        this.router.navigate(['/dashboards/orders']);
       } else {
         this.hasError = true;
         this.errorMessage = response["message"];
@@ -128,7 +131,7 @@ export class OrderDetailsComponent implements OnInit {
       if (response["status"] === true) {
         this.orderData = response["data"];
         this.items = JSON.parse(this.orderData?.items);
-        console.log("[items]", this.items);
+        this.router.navigate(['/dashboards/orders']);
       } else {
         this.hasError = true;
         this.errorMessage = response["message"];

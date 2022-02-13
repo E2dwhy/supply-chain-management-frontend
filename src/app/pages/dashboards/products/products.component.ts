@@ -29,6 +29,7 @@ import icMoreHoriz from "@iconify/icons-ic/twotone-more-horiz";
 import icFolder from "@iconify/icons-ic/twotone-folder";
 import { ProductModalComponent } from './product-modal/product-modal.component';
 import { ProductsService } from 'src/app/services/products.service';
+import { DatePipe } from '@angular/common';
 @Component({
   selector: 'vex-products',
   templateUrl: './products.component.html',
@@ -123,7 +124,8 @@ export class ProductsComponent implements OnInit {
   constructor(
     private dialog: MatDialog,
     private productsService: ProductsService,
-    private authService: AuthserviceService
+    private authService: AuthserviceService,
+    private datePipe: DatePipe
   ) {
     const user = localStorage.getItem("current_user");
 
@@ -177,10 +179,12 @@ export class ProductsComponent implements OnInit {
       .subscribe((response) => {
         this.isLoading = false;
         if (response["status"] === true) {
-          this.products = response["data"];
+          this.products = response["data"].map(data => {
+            data.created_at = this.datePipe.transform(data.created_at, 'short')
+            return data
+          });;
           this.dataSource = new MatTableDataSource();
-          this.dataSource.data = response["data"];
-          console.log('[datasource.data]', this.dataSource.data)
+          this.dataSource.data = this.products;
         } else {
           this.hasError = true;
           this.errorMessage = response['message'];

@@ -171,6 +171,7 @@
               <td class="body-2 text-secondary">PRICE PER</td>
               <!-- <td class="body-2 text-secondary">UNIT</td> -->
               <td class="body-2 text-secondary">QUANTITY</td>
+              <td class="body-2 text-secondary text-right"  *ngIf="showDiscount">DISCOUNT</td>
               <td class="body-2 text-secondary text-right">TOTAL</td>
             </tr>
           </thead>
@@ -181,9 +182,13 @@
               </td>
               <td class="py-6 border-b">{{ item.unit_price }}</td>
               <td class="py-6 border-b">{{ item.qty }}</td>
+              <td class="py-6 border-b text-secondary text-right" *ngIf="showDiscount">
+                ₦-{{ item.product_discount }}
+              </td>
               <td class="py-6 border-b font-medium text-right">
                 ₦{{ item.price }}
               </td>
+
             </tr>
           </tbody>
         </table>
@@ -199,10 +204,10 @@
                                     <td class="text-secondary text-right">TAX (19%)</td>
                                     <td class="pl-12">$436.99‬</td>
                                   </tr> -->
-              <tr *ngIf="showDiscount">
+              <!-- <tr>
                 <td class="text-secondary text-right">DISCOUNT</td>
                 <td class="pl-12">-₦{{ orderData.discount }}‬</td>
-              </tr>
+              </tr> -->
               <tr>
                 <td class="headline font-medium text-right pt-6">TOTAL</td>
                 <td class="headline font-medium pl-12 pt-6">

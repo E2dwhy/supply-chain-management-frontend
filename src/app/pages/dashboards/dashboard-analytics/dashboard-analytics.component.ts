@@ -3,6 +3,8 @@ import icGroup from "@iconify/icons-ic/twotone-group";
 import icPageView from "@iconify/icons-ic/twotone-pageview";
 import icCloudOff from "@iconify/icons-ic/twotone-cloud-off";
 import icTimer from "@iconify/icons-ic/twotone-timer";
+import icBook from "@iconify/icons-ic/twotone-book";
+import icReceipt from "@iconify/icons-ic/twotone-receipt"
 import { defaultChartOptions } from "../../../../@vex/utils/default-chart-options";
 import {
   Order,
@@ -98,9 +100,14 @@ export class DashboardAnalyticsComponent implements OnInit, OnDestroy {
   icCloudOff = icCloudOff;
   icTimer = icTimer;
   icMoreVert = icMoreVert;
+  icBook = icBook;
+  icReceipt = icReceipt;
   userSessionData: any;
   summaryData: any;
   unsubscribe$ = new Subject();
+  salesData: any;
+  dateArray: string[];
+  options: import("e:/Freelance/frontend-supply-chain-management/src/@vex/components/chart/chart.component").ApexOptions;
 
   constructor(
     private cd: ChangeDetectorRef,
@@ -114,6 +121,7 @@ export class DashboardAnalyticsComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     this.getUserSummaryData();
+    this.getSalesData();
     setTimeout(() => {
       const temp = [
         {
@@ -138,8 +146,77 @@ export class DashboardAnalyticsComponent implements OnInit, OnDestroy {
       });
   }
 
+  getSalesData() {
+    this.authService
+      .getSalesData(this.userSessionData?.user_id)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((response) => {
+        if (response["status"] === true) {
+          this.salesData = response["data"];
+          const seriesData = [];
+          this.dateArray = Object.keys(this.salesData.sales);
+          console.log('[this.dateArray]', this.dateArray);
+          Object.keys(this.salesData.sales).forEach(
+            (date) => {
+              const dailyTransactions = this.salesData.sales[date].map(
+                (transaction: any) => transaction.total_amount
+              );
+              let dailyRevenue = dailyTransactions.reduce(
+                (acc, cur) => acc + Number(cur),
+                0
+              );
+              dailyRevenue = parseFloat(dailyRevenue).toFixed(2);
+              seriesData.push(dailyRevenue);
+            }
+          );
+          this.salesSeries = [
+            {
+              name: "Revenues (₦)",
+              data: seriesData,
+            },
+          ];
+
+          this.options = defaultChartOptions({
+            grid: {
+              show: true,
+              strokeDashArray: 3,
+              padding: {
+                left: 16,
+              },
+            },
+            chart: {
+              type: "bar",
+              height: 300,
+              sparkline: {
+                enabled: false,
+              },
+              zoom: {
+                enabled: false,
+              },
+            },
+            stroke: {
+              width: 4,
+            },
+            labels: this.dateArray,
+            xaxis: {
+              type: "datetime",
+              labels: {
+                show: true,
+              },
+            },
+            yaxis: {
+              labels: {
+                show: true,
+              },
+            },
+          });
+          return this.salesData;
+        }
+      });
+  }
+
   ngOnDestroy(): void {
-      this.unsubscribe$.next();
-      this.unsubscribe$.complete();
+    this.unsubscribe$.next();
+    this.unsubscribe$.complete();
   }
 }
