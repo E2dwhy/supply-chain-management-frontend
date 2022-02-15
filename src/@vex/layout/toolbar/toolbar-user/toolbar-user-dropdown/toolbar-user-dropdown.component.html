@@ -7,17 +7,17 @@
       <div class="dropdown-heading">{{userSessionData.full_name}}</div>
     </div>
 
-    <button [matMenuTriggerFor]="settingsMenu"
+    <!-- <button [matMenuTriggerFor]="settingsMenu"
             mat-icon-button
             matTooltip="Settings"
             matTooltipPosition="before"
             type="button">
       <mat-icon [icIcon]="icSettings" class="notifications-header-icon"></mat-icon>
-    </button>
+    </button> -->
   </div>
 
   <div class="dropdown-content">
-    <a (click)="close()"
+    <!-- <a (click)="close()"
        *ngFor="let item of items; trackBy: trackById"
        [routerLink]="item.route"
        class="notification"
@@ -28,12 +28,12 @@
                 [ngClass]="item.colorClass"
                 class="notification-icon"
                 fxFlex="none"></mat-icon>
-      <!-- <div fxFlex="auto">
+       <div fxFlex="auto">
         <div class="notification-label">{{ item.label }}</div>
         <div class="notification-description">{{ item.description }}</div>
-      </div> -->
+      </div> 
       <mat-icon [icIcon]="icChevronRight" class="notification-chevron" fxFlex="none"></mat-icon>
-    </a>
+    </a> -->
   </div>
 
   <div class="dropdown-footer" fxLayout="row" fxLayoutAlign="space-between center">

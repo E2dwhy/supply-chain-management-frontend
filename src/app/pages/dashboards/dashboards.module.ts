@@ -45,6 +45,7 @@ import { MatRadioModule } from "@angular/material/radio";
 import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatSliderModule } from "@angular/material/slider";
 import { SecondaryToolbarModule } from "src/@vex/components/secondary-toolbar/secondary-toolbar.module";
+import { MatTableExporterModule } from "mat-table-exporter";
 
 @NgModule({
   imports: [
@@ -88,6 +89,7 @@ import { SecondaryToolbarModule } from "src/@vex/components/secondary-toolbar/se
     MatRadioModule,
     MatSlideToggleModule,
     SecondaryToolbarModule,
+    MatTableExporterModule
   ],
   declarations: [
     DashboardsComponent,

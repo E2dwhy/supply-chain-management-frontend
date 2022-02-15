@@ -39,6 +39,7 @@
     "html2canvas": "^1.4.1",
     "jspdf": "^2.5.0",
     "luxon": "~1.26.0",
+    "mat-table-exporter": "^10.2.4",
     "ngx-quicklink": "~0.2.7",
     "ngx-quill": "~13.2.0",
     "ngx-showdown": "~6.0.0",

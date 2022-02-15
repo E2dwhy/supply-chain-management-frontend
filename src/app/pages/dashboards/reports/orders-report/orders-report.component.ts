@@ -46,6 +46,11 @@ import icDateRange from "@iconify/icons-ic/twotone-date-range";
 import icPerson from "@iconify/icons-ic/twotone-person";
 import icRefresh from "@iconify/icons-ic/twotone-refresh";
 import icBook from "@iconify/icons-ic/twotone-book";
+import icCloudDownload from "@iconify/icons-ic/twotone-cloud-download";
+import { TableUtil } from "./tableUtil";
+import * as XLSX from "xlsx";
+import { DatePipe } from "@angular/common";
+
 @Component({
   selector: "vex-orders-report",
   templateUrl: "./orders-report.component.html",
@@ -93,14 +98,14 @@ export class OrdersReportComponent implements OnInit, OnDestroy {
       label: "Total Amount",
       property: "total_amount",
       type: "text",
-      visible: false,
+      visible: true,
     },
     // { label: "Contact", property: "phone_no", type: "button", visible: true },
     {
       label: "Delivery Address",
       property: "delivery_address",
       type: "text",
-      visible: true,
+      visible: false,
       cssClasses: ["text-secondary", "font-medium"],
     },
 
@@ -114,13 +119,17 @@ export class OrdersReportComponent implements OnInit, OnDestroy {
       cssClasses: ["text-secondary", "font-medium"],
     },
     // { label: 'Labels', property: 'labels', type: 'button', visible: true },
-    { label: "Actions", property: "actions", type: "button", visible: true },
+    // { label: "Actions", property: "actions", type: "button", visible: true },
   ];
   pageSize = 10;
   pageSizeOptions: number[] = [5, 10, 20, 50];
   dataSource: MatTableDataSource<any> | null;
   selection = new SelectionModel<any>(true, []);
   searchCtrl = new FormControl();
+  exportOptions = {
+    fileName: "test",
+    sheet: { reportsProps: { Author: "KACHELAN" } },
+  };
 
   labels = aioTableLabels;
 
@@ -136,8 +145,9 @@ export class OrdersReportComponent implements OnInit, OnDestroy {
   icMoreHoriz = icMoreHoriz;
   icFolder = icFolder;
   icDateRange = icDateRange;
-  icBook = icBook
+  icBook = icBook;
   icRefresh = icRefresh;
+  icCloudDownload = icCloudDownload;
   form: FormGroup;
 
   statusLabels = ORDER_STATUS_TABLE_LABELS;
@@ -145,7 +155,7 @@ export class OrdersReportComponent implements OnInit, OnDestroy {
   @ViewChild(MatPaginator, { static: true }) paginator: MatPaginator;
   @ViewChild(MatSort, { static: true }) sort: MatSort;
   userSessionData: any;
-  hasError: boolean;
+  hasError: boolean = false;
   errorMessage: string;
   isLoading: boolean;
   customers: any;
@@ -159,7 +169,8 @@ export class OrdersReportComponent implements OnInit, OnDestroy {
     private fb: FormBuilder,
     private productsService: ProductsService,
     private orderService: OrdersService,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private datePipe: DatePipe
   ) {
     const user = localStorage.getItem("current_user");
 
@@ -220,7 +231,7 @@ export class OrdersReportComponent implements OnInit, OnDestroy {
       dateFrom: [""],
       dateTo: [""],
       customer: [""],
-      productID: [""]
+      productID: [""],
     });
     this.getOrdersList();
   }
@@ -242,6 +253,7 @@ export class OrdersReportComponent implements OnInit, OnDestroy {
   }
 
   getOrdersList(filteredData = null) {
+    this.hasError = false;
     this.isLoading = true;
     this.ordersService
       .getOrdersList(this.userSessionData?.user_id)
@@ -249,12 +261,14 @@ export class OrdersReportComponent implements OnInit, OnDestroy {
       .subscribe((response) => {
         this.isLoading = false;
         if (response["status"] === true) {
-            this.orders = response["data"].map((data) => {
-              data.status = this.getStatusLabel(data.status);
-              return data;
-            });
-            this.dataSource = new MatTableDataSource();
-            this.dataSource.data = this.orders;
+          this.orders = response["data"].map((data) => {
+            data.status = this.getStatusLabel(data.status);
+            data.created_at = this.datePipe.transform(data.created_at, "short");
+            return data;
+          });
+          this.dataSource = new MatTableDataSource();
+          this.dataSource.data = this.orders;
+          this.hasError = false;
         } else {
           this.hasError = true;
           this.errorMessage = response["message"];
@@ -322,7 +336,6 @@ export class OrdersReportComponent implements OnInit, OnDestroy {
   // }
 
   search() {
-    console.log(["[searchForm]", this.form.value]);
     if (this.form.value["dateFrom"] && this.form.value["dateTo"]) {
       const from = new Date(this.form.value["dateFrom"])
         .toISOString()
@@ -334,29 +347,45 @@ export class OrdersReportComponent implements OnInit, OnDestroy {
         .replace("T", " ");
       // this.form.get("dateFrom").setValue(from);
       // this.form.get("dateTo").setValue(to);
-      this.form.value['dateFrom'] = from;
-      this.form.value['dateTo'] = to;
+      this.form.value["dateFrom"] = from;
+      this.form.value["dateTo"] = to;
     }
 
     this.isLoading = true;
     this.ordersService
       .searchOrders(this.userSessionData?.user_id, this.form.value)
       .pipe(takeUntil(this.unsubscribe$))
-      .subscribe((response) => {
-        this.isLoading = false;
-        if (response["status"] === true) {
-          this.orders = response["data"].map((data) => {
-            data.status = this.getStatusLabel(data.status);
-            return data;
-          });
-          this.dataSource = new MatTableDataSource();
-          this.dataSource.data = this.orders;
-        } else {
+      .subscribe(
+        (response) => {
+          this.isLoading = false;
+          if (response["status"] === true) {
+            this.orders = response["data"].map((data) => {
+              data.status = this.getStatusLabel(data.status);
+              data.created_at = this.datePipe.transform(
+                data.created_at,
+                "short"
+              );
+              return data;
+            });
+            this.dataSource = new MatTableDataSource();
+            this.dataSource.data = this.orders;
+            if (!this.dataSource.data.length) {
+              this.hasError = true;
+              this.errorMessage =
+                "No data Found for the specified search criteria. Please try with different data";
+            }
+          } else {
+            this.hasError = true;
+            this.errorMessage =
+              "No data Found for the specified search criteria. Please try with different data";
+          }
+        },
+        (erro) => {
           this.hasError = true;
           this.errorMessage =
             "No data Found for the specified search criteria. Please try with different data";
         }
-      });
+      );
   }
 
   viewOrderDetails(order: any) {
@@ -364,7 +393,6 @@ export class OrdersReportComponent implements OnInit, OnDestroy {
   }
 
   getStatusLabel(status: string) {
-    console.log("status", status);
     return this.statusLabels.find((label) => label.text === status);
   }
 
@@ -432,5 +460,23 @@ export class OrdersReportComponent implements OnInit, OnDestroy {
     // const index = this.orders.findIndex(c => c === row);
     // this.orders[index].labels = change.value;
     // this.subject$.next(this.orders);
+  }
+
+  exportTable() {
+    TableUtil.exportTableToExcel("ExampleMaterialTable");
+  }
+
+  exportNormalTable() {
+    TableUtil.exportTableToExcel("ExampleNormalTable");
+  }
+
+  exportArray() {
+    const onlyNameAndSymbolArr: Partial<any>[] = this.dataSource.data.map(
+      (x) => ({
+        name: x.name,
+        status: x.status,
+      })
+    );
+    TableUtil.exportArrayToExcel(onlyNameAndSymbolArr, "ExampleArray");
   }
 }

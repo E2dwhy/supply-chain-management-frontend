@@ -66,7 +66,7 @@
                       placeholder="Product"
                       formControlName="productID"
                     >
-                    <mat-option [value]=""> Select Product </mat-option>
+                      <mat-option [value]=""> Select Product </mat-option>
                       <mat-option
                         *ngFor="let product of products"
                         id="newAttributeProduct"
@@ -88,7 +88,7 @@
                       placeholder="Sales Rep"
                       formControlName="salesRepID"
                     >
-                    <mat-option [value]=""> Select Sales Rep </mat-option>
+                      <mat-option [value]=""> Select Sales Rep </mat-option>
                       <mat-option
                         *ngFor="let user of users"
                         id="newAttributeUser"
@@ -174,19 +174,19 @@
                   ></mat-icon>
                 </button>
                 <button
-                color="primary"
-                mat-button
-                typr="button"
-                (click)="resetForm()"
-                [disabled]="form.invalid"
-              >
-                RESET
-                <mat-icon
-                  [icIcon]="icRefresh"
-                  class="mr-3"
-                  matPrefix
-                ></mat-icon>
-              </button>
+                  color="primary"
+                  mat-button
+                  typr="button"
+                  (click)="resetForm()"
+                  [disabled]="form.invalid"
+                >
+                  RESET
+                  <mat-icon
+                    [icIcon]="icRefresh"
+                    class="mr-3"
+                    matPrefix
+                  ></mat-icon>
+                </button>
               </div>
             </div>
           </form>
@@ -283,6 +283,28 @@
         >
           <mat-icon [icIcon]="icFilterList"></mat-icon>
         </button>
+
+        <button
+          mat-raised-button
+          (click)="
+            exporter.exportTable('xlsx', {
+              fileName: 'Orders Report',
+              sheet: 'sheet_name',
+              Props: { Author: 'KACHELAN' }
+            })
+          "
+        >
+          <mat-icon [icIcon]="icCloudDownload"></mat-icon>Excel
+        </button>
+        <!-- <button mat-raised-button (click)="exporter.exportTable('csv')">
+          Csv
+        </button>
+        <button mat-raised-button (click)="exporter.exportTable('json')">
+          Json
+        </button>
+        <button mat-raised-button (click)="exporter.exportTable('txt')">
+          Txt
+        </button> -->
       </div>
       <div *ngIf="isLoading" class="card overflow-auto -mt-16">
         <div
@@ -296,12 +318,15 @@
           <mat-spinner color="primary"> </mat-spinner>
         </div>
       </div>
+
       <table
         @stagger
         [dataSource]="dataSource"
         class="w-full"
         mat-table
         matSort
+        matTableExporter
+        #exporter="matTableExporter"
       >
         <!--- Note that these columns can be defined in any order.
               The actual rendered columns are set as a property on the row definition" -->
@@ -388,7 +413,8 @@
           mat-row
         ></tr>
       </table>
-     
+      <h6 *ngIf="hasError">{{ errorMessage }}</h6>
+
       <mat-paginator
         [pageSizeOptions]="pageSizeOptions"
         [pageSize]="pageSize"

@@ -57,6 +57,10 @@ export class LoginComponent implements OnInit {
         this.hasError = true;
         this.errorMessage = 'Invalid email/password combination';
       }
+    }, (error) => {
+      this.hasError = true;
+      this.errorMessage = 'Invalid email/password combination';
+
     })
   }
 
