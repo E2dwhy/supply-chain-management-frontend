@@ -13,7 +13,7 @@ export class ProductsService {
 
 
   addProducts(productData): Observable<any> {
-    const url = `http://127.0.0.1:8000/api/addproduct`;
+    const url = `https://api.kachelan.com/api/addproduct`;
     let params = new HttpParams();
 
     return this.http.post(url, productData, { responseType: "json", params: params }).pipe(
@@ -28,7 +28,7 @@ export class ProductsService {
   }
 
     deleteProduct(user_id, product_id): Observable<any> {
-    const url = `http://127.0.0.1:8000/api/deleteproduct/${user_id}/${product_id}`;
+    const url = `https://api.kachelan.com/api/deleteproduct/${user_id}/${product_id}`;
     let params = new HttpParams();
     params = params.append("user_id", user_id);
 
@@ -44,7 +44,7 @@ export class ProductsService {
   }
 
   updateProduct(user_id, productData): Observable<any> {
-    const url = `http://127.0.0.1:8000/api/updateproduct/${user_id}`;
+    const url = `https://api.kachelan.com/api/updateproduct/${user_id}`;
 
     return this.http.put(url, productData, { responseType: "json" }).pipe(
       map((response) => {
@@ -58,7 +58,7 @@ export class ProductsService {
   }
 
   getProductsList(user_id): Observable<any> {
-    const url = `http://127.0.0.1:8000/api/getproductslist/${user_id}`;
+    const url = `https://api.kachelan.com/api/getproductslist/${user_id}`;
     let params = new HttpParams();
     params = params.append("user_id", user_id);
 
@@ -74,7 +74,7 @@ export class ProductsService {
   }
 
   getProductDetailsById(uid, product_id): Observable<any> {
-    const url = `http://127.0.0.1:8000/api/getproductbyid/${product_id}`;
+    const url = `https://api.kachelan.com/api/getproductbyid/${product_id}`;
     let params = new HttpParams();
     params = params.append("uid", uid);
 

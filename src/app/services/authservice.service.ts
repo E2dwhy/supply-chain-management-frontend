@@ -14,7 +14,7 @@ export class AuthserviceService {
   constructor(private http: HttpClient) {}
 
   login(email, password): Observable<any> {
-    const url = "http://127.0.0.1:8000/api/login";
+    const url = "https://api.kachelan.com/api/login";
     const body = {
       email: email,
       password,
@@ -32,7 +32,7 @@ export class AuthserviceService {
   }
 
   register(userData): Observable<any> {
-    const url = "http://127.0.0.1:8000/api/register";
+    const url = "https://api.kachelan.com/api/register";
 
     return this.http.post(url, userData, { responseType: "json" }).pipe(
       map((response) => {
@@ -46,7 +46,7 @@ export class AuthserviceService {
   }
 
   getSummaryData(user_id: string): Observable<any> {
-    const url = `http://127.0.0.1:8000/api/getusersummarydata/${user_id}`;
+    const url = `https://api.kachelan.com/api/getusersummarydata/${user_id}`;
 
     return this.http.get(url, { responseType: "json" }).pipe(
       map((response) => {
@@ -60,7 +60,7 @@ export class AuthserviceService {
   }
 
   getSalesData(user_id: string): Observable<any> {
-    const url = `http://127.0.0.1:8000/api/getmonthlysales/${user_id}`;
+    const url = `https://api.kachelan.com/api/getmonthlysales/${user_id}`;
 
     return this.http.get(url, { responseType: "json" }).pipe(
       map((response) => {
@@ -74,7 +74,7 @@ export class AuthserviceService {
   }
 
   deleteUSer(user_id: any): Observable<any> {
-    const url = `http://127.0.0.1:8000/api/deleteuser/${user_id}`;
+    const url = `https://api.kachelan.com/api/deleteuser/${user_id}`;
 
     return this.http.delete(url, { responseType: "json" }).pipe(
       map((response) => {
@@ -142,7 +142,7 @@ export class AuthserviceService {
   }
 
   getUsersList(user_id): Observable<any> {
-    const url = `http://127.0.0.1:8000/api/getusers/${user_id}`;
+    const url = `https://api.kachelan.com/api/getusers/${user_id}`;
     let params = new HttpParams();
     params = params.append("user_id", user_id);
 
@@ -160,7 +160,7 @@ export class AuthserviceService {
   }
 
   getCustomersList(user_id): Observable<any> {
-    const url = `http://127.0.0.1:8000/api/getcustomers/${user_id}`;
+    const url = `https://api.kachelan.com/api/getcustomers/${user_id}`;
     let params = new HttpParams();
     params = params.append("user_id", user_id);
 
@@ -232,7 +232,7 @@ export class AuthserviceService {
   }
 
   updateUser(userData) {
-    const url = `http://127.0.0.1:8000/api/updateuserrole`;
+    const url = `https://api.kachelan.com/api/updateuserrole`;
 
     return this.http.put(url, userData, { responseType: "json" }).pipe(
       map((response) => {
@@ -246,7 +246,7 @@ export class AuthserviceService {
   }
 
   addCustomer(customerData) {
-    const url = `http://127.0.0.1:8000/api/addcustomer`;
+    const url = `https://api.kachelan.com/api/addcustomer`;
 
     return this.http.post(url, customerData, { responseType: "json" }).pipe(
       map((response) => {
@@ -260,7 +260,7 @@ export class AuthserviceService {
   }
 
   updateCustomer(customerData, user_id) {
-    const url = `http://127.0.0.1:8000/api/updatecustomer/${user_id}`;
+    const url = `https://api.kachelan.com/api/updatecustomer/${user_id}`;
 
     return this.http.put(url, customerData, { responseType: "json" }).pipe(
       map((response) => {

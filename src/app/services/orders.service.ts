@@ -12,7 +12,7 @@ constructor(private http: HttpClient) { }
 
 
 addOrders(orderData): Observable<any> {
-  const url = `http://127.0.0.1:8000/api/createorder`;
+  const url = `https://api.kachelan.com/api/createorder`;
   let params = new HttpParams();
 
   return this.http.post(url, orderData, { responseType: "json", params: params }).pipe(
@@ -27,7 +27,7 @@ addOrders(orderData): Observable<any> {
 }
 
 updateOrders(user_id, orderData): Observable<any> {
-  const url = `http://127.0.0.1:8000/api/updateorder/${user_id}`;
+  const url = `https://api.kachelan.com/api/updateorder/${user_id}`;
   let params = new HttpParams();
 
   return this.http.put(url, orderData, { responseType: "json", params: params }).pipe(
@@ -42,7 +42,7 @@ updateOrders(user_id, orderData): Observable<any> {
 }
 
 updateOrder(orderData): Observable<any> {
-  const url = `http://127.0.0.1:8000/api/updateorder`;
+  const url = `https://api.kachelan.com/api/updateorder`;
   let params = new HttpParams();
 
   return this.http.put(url, orderData, { responseType: "json", params: params }).pipe(
@@ -57,7 +57,7 @@ updateOrder(orderData): Observable<any> {
 }
 
 updateOrderStatus(orderData): Observable<any> {
-  const url = `http://127.0.0.1:8000/api/updateorderstatus`;
+  const url = `https://api.kachelan.com/api/updateorderstatus`;
   let params = new HttpParams();
 
   return this.http.put(url, orderData, { responseType: "json", params: params }).pipe(
@@ -72,7 +72,7 @@ updateOrderStatus(orderData): Observable<any> {
 }
 
   deleteOrder(user_id, order_id): Observable<any> {
-  const url = `http://127.0.0.1:8000/api/deleteorder/${user_id}/${order_id}`;
+  const url = `https://api.kachelan.com/api/deleteorder/${user_id}/${order_id}`;
   let params = new HttpParams();
   params = params.append("user_id", user_id);
 
@@ -88,7 +88,7 @@ updateOrderStatus(orderData): Observable<any> {
 }
 
 searchOrders(user_id, filterData): Observable<any> {
-  const url = `http://127.0.0.1:8000/api/searchorder/${user_id}`;
+  const url = `https://api.kachelan.com/api/searchorder/${user_id}`;
   let params = new HttpParams();
   params = params.append("productID", filterData.productID);
   params = params.append("customer", filterData.customer);
@@ -110,7 +110,7 @@ searchOrders(user_id, filterData): Observable<any> {
 }
 
 getOrdersList(user_id): Observable<any> {
-  const url = `http://127.0.0.1:8000/api/getorderslist/${user_id}`;
+  const url = `https://api.kachelan.com/api/getorderslist/${user_id}`;
   let params = new HttpParams();
   params = params.append("user_id", user_id);
 
@@ -127,7 +127,7 @@ getOrdersList(user_id): Observable<any> {
     );
 }
 getOrderDetailsById(uid, order_id): Observable<any> {
-  const url = `http://127.0.0.1:8000/api/getorderbyid/${order_id}/${uid}`;
+  const url = `https://api.kachelan.com/api/getorderbyid/${order_id}/${uid}`;
 
   return this.http
     .get(url, { responseType: "json" })
