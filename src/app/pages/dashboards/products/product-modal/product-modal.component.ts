@@ -13,9 +13,12 @@ import icMyLocation from "@iconify/icons-ic/twotone-my-location";
 import icLocationCity from "@iconify/icons-ic/twotone-location-city";
 import icEditLocation from "@iconify/icons-ic/twotone-edit-location";
 import icAdd from "@iconify/icons-ic/twotone-add";
+import icDateRange from "@iconify/icons-ic/twotone-date-range";
+import icFolder from "@iconify/icons-ic/twotone-folder";
 import icShoppingBasket from "@iconify/icons-ic/twotone-shopping-basket";
 import { ProductsService } from "src/app/services/products.service";
 import { take } from "rxjs/operators";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "vex-product-modal",
@@ -49,6 +52,8 @@ export class ProductModalComponent implements OnInit {
   icLocationCity = icLocationCity;
   icEditLocation = icEditLocation;
   icPhone = icPhone;
+  icDateRange = icDateRange;
+  icFolder = icFolder;
   icShoppingBasket = icShoppingBasket;
   userSessionData: any;
 
@@ -56,7 +61,8 @@ export class ProductModalComponent implements OnInit {
     @Inject(MAT_DIALOG_DATA) public orderData: any,
     private dialogRef: MatDialogRef<ProductModalComponent>,
     private fb: FormBuilder,
-    private productsService: ProductsService
+    private productsService: ProductsService,
+    private snackBar: MatSnackBar
   ) {
     const user = localStorage.getItem("current_user");
 
@@ -77,6 +83,8 @@ export class ProductModalComponent implements OnInit {
       name: this.orderData?.name || "",
       qty: this.orderData?.qty || "",
       price: this.orderData?.price || "",
+      batch_no: this.orderData?.batch_no || "",
+      manif_date: this.orderData?.manif_date || ""
     });
   }
 
@@ -92,6 +100,14 @@ export class ProductModalComponent implements OnInit {
     this.fieldArray.push(this.newAttribute);
     this.newAttribute = {};
   }
+
+  openSnackbar(message) {
+    this.snackBar.open(message, 'CLOSE', {
+      duration: 3000,
+      horizontalPosition: 'right'
+    });
+  }
+
 
   deleteFieldValue(index) {
     this.fieldArray.splice(index, 1);

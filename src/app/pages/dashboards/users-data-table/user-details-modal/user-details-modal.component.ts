@@ -18,6 +18,7 @@ import icEdit from "@iconify/icons-ic/twotone-edit";
 import { Router, UrlSerializer } from "@angular/router";
 import { AuthserviceService } from "src/app/services/authservice.service";
 import { take } from "rxjs/operators";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 
 @Component({
@@ -62,7 +63,9 @@ export class UserDetailsModalComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router, 
     private serializer: UrlSerializer,
-    private authService: AuthserviceService
+    private authService: AuthserviceService,
+    private snackBar: MatSnackBar
+    
   ) {
     const user = localStorage.getItem("current_user");
 
@@ -112,7 +115,7 @@ export class UserDetailsModalComponent implements OnInit {
     }
 
     customer.id = this.userData.id;
-    const url = `http://localhost:4200/register?r=${this.form.value?.role}&pn=${this.form.value?.phone_no}&fn=${this.form.value?.full_name}&em=${this.form.value?.email}`
+    const url = `https://api.kachelan.com/register?r=${this.form.value?.role}&pn=${this.form.value?.phone_no}&fn=${this.form.value?.full_name}&em=${this.form.value?.email}`
     this.form.get('url').setValue(url);
 
 
@@ -129,6 +132,7 @@ export class UserDetailsModalComponent implements OnInit {
         .pipe(take(1))
         .subscribe((response) => {
           if (response["status"] === true) {
+            this.openSnackbar(response["message"] );
             this.dialogRef.close(user);
           } else {
             this.dialogRef.close();
@@ -136,6 +140,12 @@ export class UserDetailsModalComponent implements OnInit {
         });
   }
 
+  openSnackbar(message) {
+    this.snackBar.open(message, 'CLOSE', {
+      duration: 3000,
+      horizontalPosition: 'right'
+    });
+  }
 
   isCreateMode(): boolean {
     return this.mode === "create";

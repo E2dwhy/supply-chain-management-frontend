@@ -67,10 +67,28 @@
       <mat-icon [icIcon]="icPhone" class="mr-3" matPrefix></mat-icon>
     </mat-form-field>
 
-    <!-- <mat-form-field class="flex-auto">
-      <mat-label>Notes</mat-label>
-      <textarea formControlName="notes" matInput></textarea>
-    </mat-form-field> -->
+    <mat-form-field class="flex-auto">
+      <mat-label>Batch Number</mat-label>
+      <input formControlName="batch_no" matInput />
+
+      <mat-icon [icIcon]="icFolder" class="mr-3" matPrefix></mat-icon>
+    </mat-form-field>
+
+    <mat-form-field class="flex-auto">
+      <mat-label>Manif Date</mat-label>
+      <input
+        formControlName="manif_date                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               "
+        [matDatepicker]="datepickerRefa"
+        matInput
+      />
+      <mat-datepicker-toggle
+        [for]="datepickerRefa"
+        matSuffix
+      ></mat-datepicker-toggle>
+      <mat-datepicker #datepickerRefa></mat-datepicker>
+      <mat-hint>Click to select date</mat-hint>
+    </mat-form-field>
+
   </mat-dialog-content>
 
   <mat-dialog-actions align="end">

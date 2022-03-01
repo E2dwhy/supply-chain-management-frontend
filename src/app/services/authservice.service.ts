@@ -73,8 +73,22 @@ export class AuthserviceService {
     );
   }
 
-  deleteUSer(user_id: any): Observable<any> {
-    const url = `https://api.kachelan.com/api/deleteuser/${user_id}`;
+  deleteUSer(user_id: any, id: any): Observable<any> {
+    const url = `https://api.kachelan.com/api/deleteuser/${user_id}/${id}`;
+
+    return this.http.delete(url, { responseType: "json" }).pipe(
+      map((response) => {
+        return response;
+      }),
+      catchError((error: HttpErrorResponse) => {
+        console.log("Error", error.message);
+        return observableThrowError(error);
+      })
+    );
+  }
+
+  deleteCustomer(user_id: any, id: any): Observable<any> {
+    const url = `https://api.kachelan.com/api/deletecustomer/${user_id}/${id}`;
 
     return this.http.delete(url, { responseType: "json" }).pipe(
       map((response) => {

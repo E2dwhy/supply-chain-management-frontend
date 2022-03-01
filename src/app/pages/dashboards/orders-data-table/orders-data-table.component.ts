@@ -32,6 +32,7 @@ import { OrderModalComponent } from './order-modal/order-modal.component';
 import { Router } from '@angular/router';
 import { ORDER_STATUS_TABLE_LABELS } from 'src/app/Models/constants';
 import { DatePipe } from '@angular/common';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'vex-orders-data-table',
@@ -131,7 +132,8 @@ export class OrdersDataTableComponent implements OnInit {
     private ordersService: OrdersService,
     private authService: AuthserviceService,
     private router: Router,
-    public datePipe: DatePipe
+    public datePipe: DatePipe,
+    private snackBar: MatSnackBar,
   ) {
     const user = localStorage.getItem("current_user");
 
@@ -159,6 +161,14 @@ export class OrdersDataTableComponent implements OnInit {
     this.unsubscribe$.complete();
   }
 
+  openSnackbar(message) {
+    this.snackBar.open(message, 'CLOSE', {
+      duration: 3000,
+      horizontalPosition: 'right'
+    });
+  }
+
+  
   ngOnInit() {
     // this.getData().subscribe(customers => {
     //   this.subject$.next(customers);
@@ -284,11 +294,13 @@ export class OrdersDataTableComponent implements OnInit {
       .deleteOrder(this.userSessionData?.user_id, order.id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((response) => {
-        if (response["data"] === true) {
+        if (response["status"] === true) {
+          this.openSnackbar(response["message"]);
           this.getOrdersList();
         }
       });
   }
+
 
   deleteCustomers(customers: Customer[]) {
     /**
@@ -336,6 +348,8 @@ export class OrdersDataTableComponent implements OnInit {
     // this.orders[index].labels = change.value;
     // this.subject$.next(this.orders);
   }
+
+  
 
 
 }

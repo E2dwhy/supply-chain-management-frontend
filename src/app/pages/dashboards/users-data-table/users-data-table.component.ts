@@ -32,6 +32,7 @@ import icFolder from "@iconify/icons-ic/twotone-folder";
 import { UserSession } from "src/app/Models/interfaces";
 import { AuthserviceService } from "src/app/services/authservice.service";
 import { UserDetailsModalComponent } from "./user-details-modal/user-details-modal.component";
+import { MatSnackBar } from "@angular/material/snack-bar";
 
 @Component({
   selector: "vex-users-data-table",
@@ -59,6 +60,7 @@ export class UsersDataTableComponent implements OnInit, OnDestroy {
   data$: Observable<Customer[]> = this.subject$.asObservable();
   users: UserSession[];
   unsubscribe$ = new Subject();
+
   @Input()
   columns: TableColumn<Customer>[] = [
     // { label: 'Checkbox', property: 'checkbox', type: 'checkbox', visible: true },
@@ -126,7 +128,8 @@ export class UsersDataTableComponent implements OnInit, OnDestroy {
 
   constructor(
     private dialog: MatDialog,
-    private authService: AuthserviceService
+    private authService: AuthserviceService,
+    private snackBar: MatSnackBar
   ) {
     const user = localStorage.getItem("current_user");
 
@@ -230,6 +233,14 @@ export class UsersDataTableComponent implements OnInit, OnDestroy {
       });
   }
 
+  
+  openSnackbar(message) {
+    this.snackBar.open(message, 'CLOSE', {
+      duration: 3000,
+      horizontalPosition: 'right'
+    });
+  }
+
   updateUser(user: any) {
     this.dialog
       .open(UserDetailsModalComponent, {
@@ -264,10 +275,11 @@ export class UsersDataTableComponent implements OnInit, OnDestroy {
     // this.subject$.next(this.users);
 
     this.authService
-      .deleteUSer(user.id)
+      .deleteUSer(this.userSessionData?.user_id, user.id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((response) => {
-        if (response["data"] === true) {
+        if (response["status"] === true) {
+          this.openSnackbar(response['message']);
           this.getUsersData();
         }
       });

@@ -262,7 +262,7 @@ export class CustomersComponent implements OnInit {
     // this.subject$.next(this.users);
 
     this.authService
-      .deleteUSer(user.id)
+      .deleteCustomer(this.userSessionData?.id, user.id)
       .pipe(takeUntil(this.unsubscribe$))
       .subscribe((response) => {
         if (response["data"] === true) {

@@ -131,6 +131,7 @@ export class OrderDetailsComponent implements OnInit {
       if (response["status"] === true) {
         this.orderData = response["data"];
         this.items = JSON.parse(this.orderData?.items);
+        this.openSnackbar('Order rejected successfully');
         this.router.navigate(['/dashboards/orders']);
       } else {
         this.hasError = true;
