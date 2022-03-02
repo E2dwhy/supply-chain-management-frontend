@@ -8,7 +8,7 @@ export interface NavigationLink {
   fragment?: string;
   label: string;
   icon?: Icon;
-  permission?: string;
+  permission?: string[];
   routerLinkActiveOptions?: { exact: boolean };
   badge?: {
     value: string;
@@ -21,7 +21,7 @@ export interface NavigationDropdown {
   type: 'dropdown';
   label: string;
   icon?: Icon;
-  permission?: string
+  permission?: string[]
   children: Array<NavigationLink | NavigationDropdown>;
   badge?: {
     value: string;
@@ -33,6 +33,6 @@ export interface NavigationDropdown {
 export interface NavigationSubheading {
   type: 'subheading';
   label: string;
-  permission?: string;
+  permission?: string[];
   children: Array<NavigationLink | NavigationDropdown>;
 }

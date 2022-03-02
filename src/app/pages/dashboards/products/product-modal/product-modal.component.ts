@@ -115,6 +115,13 @@ export class ProductModalComponent implements OnInit {
 
   addProduct() {
     const product = this.form.value;
+    if (this.form.value["manif_date"]) {
+      const manifDate = new Date(this.form.value["manif_date"])
+        .toISOString()
+        .slice(0, 19)
+        .replace("T", " ");
+      product['manif_date'] = manifDate;
+    }
     product.user_id = this.userSessionData?.user_id;
     // if (!product.imageSrc) {
     //   product.imageSrc = "assets/img/avatars/1.jpg";

@@ -48,7 +48,6 @@ export class RegisterComponent implements OnInit {
       this.fullName = params["fn"];
       this.phoneNumber = params["pn"];
       // this.userID = params["user_id"];
-      console.log("[params]", params);
       this.buildForm();
     });
   }
@@ -89,7 +88,6 @@ export class RegisterComponent implements OnInit {
       role: this.getRole(),
       user_id: this.getUserID(),
     };
-    console.log("[userData]", this.userData);
 
     this.authService
       .register(this.userData)

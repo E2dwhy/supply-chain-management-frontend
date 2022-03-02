@@ -1,4 +1,4 @@
-import { Component, Inject, LOCALE_ID, Renderer2 } from "@angular/core";
+import { Component, Inject, LOCALE_ID, OnDestroy, Renderer2 } from "@angular/core";
 import { ConfigService } from "../@vex/services/config.service";
 import { Settings } from "luxon";
 import { DOCUMENT } from "@angular/common";
@@ -38,17 +38,29 @@ import icMail from "@iconify/icons-ic/twotone-mail";
 import icMoney from "@iconify/icons-ic/twotone-money";
 import icPerson from "@iconify/icons-ic/twotone-person";
 import { colorVariables } from "src/@vex/components/config-panel/color-variables";
+import { DEFAULT_INTERRUPTSOURCES, Idle } from "@ng-idle/core";
+import { Keepalive } from "@ng-idle/keepalive";
+import { MatDialog } from "@angular/material/dialog";
+import { AuthTimeoutModalComponent } from "./pages/dashboards/auth-timeout-modal/auth-timeout-modal.component";
+
 @Component({
   selector: "vex-root",
   templateUrl: "./app.component.html",
   styleUrls: ["./app.component.scss"],
 })
-export class AppComponent {
-  title = "vex";
+export class AppComponent implements OnDestroy {
+  title = "kachelan-supply-chain-system";
+  idleState = "Not started.";
+  timedOut = false;
+  lastPing?: Date = null;
+
   userSessionData: any;
   colorVariables = colorVariables;
   color = colorVariables.green
   constructor(
+    private idle: Idle,
+    private keepalive: Keepalive,
+    private dialog: MatDialog,
     private configService: ConfigService,
     private styleService: StyleService,
     private renderer: Renderer2,
@@ -61,6 +73,45 @@ export class AppComponent {
     private navigationService: NavigationService,
     private splashScreenService: SplashScreenService
   ) {
+
+      // sets an idle timeout of 5 seconds, for testing purposes.
+      idle.setIdle(1200);
+      // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
+      idle.setTimeout(30);
+      // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
+      idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
+  
+      idle.onIdleEnd.subscribe(() => {
+        this.idleState = "No longer idle.";
+        console.info('[SESSION TIMEOUT]', this.idleState);
+        this.reset();
+      });
+  
+      idle.onTimeout.subscribe(() => {
+        this.idleState = "Timed out!";
+        this.timedOut = true;
+        console.info('[SESSION TIMEOUT]', this.idleState);
+        this.logout();
+      });
+  
+      idle.onIdleStart.subscribe(() => {
+        this.idleState = "You've gone idle!";
+        console.info('[SESSION TIMEOUT]', this.idleState);
+        this.dialog.open(AuthTimeoutModalComponent);
+      });
+  
+      idle.onTimeoutWarning.subscribe((countdown) => {
+        this.idleState = "You will time out in " + countdown + " seconds!";
+        console.info('[SESSION TIMEOUT]', this.idleState);
+      });
+  
+      // sets the ping interval to 15 seconds
+      keepalive.interval(60);
+  
+      keepalive.onPing.subscribe(() => (this.lastPing = new Date()));
+  
+      this.reset();
+  
     Settings.defaultLocale = this.localeId;
 
     if (this.platform.BLINK) {
@@ -156,26 +207,27 @@ export class AppComponent {
         label: "products",
         route: "/dashboards/products",
         icon: icBook,
+        permission: ["admin", "supply manager", "store manager"],
       },
       {
         type: "link",
         label: "Users",
         route: "/dashboards/users",
         icon: icContacts,
-        permission: "admin",
+        permission: ["admin"],
       },
       {
         type: "link",
         label: "customers ",
         route: "/dashboards/customers",
         icon: icPerson,
-        permission: "admin",
+        permission: ["admin", "sales rep"],
       },
       {
         type: "dropdown",
         label: "Reports",
         icon: icAssessment,
-        permission: "admin",
+        permission:["admin"],
         children: [
           {
             type: "link",
@@ -711,5 +763,22 @@ export class AppComponent {
       //   icon: icSettings
       // }
     ];
+  }
+
+  ngOnDestroy() {
+    this.logout();
+  }
+  
+  reset() {
+    this.idle.watch();
+    this.idleState = "Started.";
+    this.timedOut = false;
+  }
+
+  logout() {
+    localStorage.clear();
+    sessionStorage.clear();
+    this.dialog.closeAll();
+    this.router.navigate(["/login"]);
   }
 }

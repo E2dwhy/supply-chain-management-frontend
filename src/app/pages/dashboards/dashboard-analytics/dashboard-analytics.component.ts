@@ -155,7 +155,6 @@ export class DashboardAnalyticsComponent implements OnInit, OnDestroy {
           this.salesData = response["data"];
           const seriesData = [];
           this.dateArray = Object.keys(this.salesData.sales);
-          console.log('[this.dateArray]', this.dateArray);
           Object.keys(this.salesData.sales).forEach(
             (date) => {
               const dailyTransactions = this.salesData.sales[date].map(

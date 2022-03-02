@@ -186,7 +186,6 @@ export class UsersDataTableComponent implements OnInit, OnDestroy {
           this.users = response["data"];
           this.dataSource = new MatTableDataSource();
           this.dataSource.data = response["data"];
-          console.log("[datasource.data]", this.dataSource.data);
         } else {
           this.hasError = true;
           this.errorMessage = response["message"];

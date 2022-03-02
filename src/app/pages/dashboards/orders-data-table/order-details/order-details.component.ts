@@ -156,7 +156,6 @@ export class OrderDetailsComponent implements OnInit {
         if (response["status"] === true) {
           this.orderData = response["data"];
           this.items = JSON.parse(this.orderData?.items);
-          console.log("[items]", this.items);
         } else {
           this.hasError = true;
           this.errorMessage = response["message"];

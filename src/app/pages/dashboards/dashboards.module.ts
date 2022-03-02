@@ -1,4 +1,4 @@
-import { NgModule } from "@angular/core";
+import { CUSTOM_ELEMENTS_SCHEMA, NgModule, NO_ERRORS_SCHEMA } from "@angular/core";
 import { CommonModule, DatePipe } from "@angular/common";
 import { DashboardsComponent } from "./dashboards.component";
 import { ActivityLogsComponent } from "./activity-logs/activity-logs.component";
@@ -46,6 +46,7 @@ import { MatSlideToggleModule } from "@angular/material/slide-toggle";
 import { MatSliderModule } from "@angular/material/slider";
 import { SecondaryToolbarModule } from "src/@vex/components/secondary-toolbar/secondary-toolbar.module";
 import { MatTableExporterModule } from "mat-table-exporter";
+import { AuthTimeoutModalComponent } from "./auth-timeout-modal/auth-timeout-modal.component";
 
 @NgModule({
   imports: [
@@ -89,7 +90,7 @@ import { MatTableExporterModule } from "mat-table-exporter";
     MatRadioModule,
     MatSlideToggleModule,
     SecondaryToolbarModule,
-    MatTableExporterModule
+    MatTableExporterModule,
   ],
   declarations: [
     DashboardsComponent,
@@ -105,7 +106,9 @@ import { MatTableExporterModule } from "mat-table-exporter";
     OrderModalComponent,
     CustomersComponent,
     CustomersModalComponent,
+    AuthTimeoutModalComponent
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   providers: [DatePipe]
 })
 export class DashboardsModule {}

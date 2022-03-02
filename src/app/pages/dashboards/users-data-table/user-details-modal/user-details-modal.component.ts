@@ -115,7 +115,7 @@ export class UserDetailsModalComponent implements OnInit {
     }
 
     customer.id = this.userData.id;
-    const url = `https://api.kachelan.com/register?r=${this.form.value?.role}&pn=${this.form.value?.phone_no}&fn=${this.form.value?.full_name}&em=${this.form.value?.email}`
+    const url = `https://dashboard.kachelan.com/register?r=${this.form.value?.role}&pn=${this.form.value?.phone_no}&fn=${this.form.value?.full_name}&em=${this.form.value?.email}`
     this.form.get('url').setValue(url);
 
 

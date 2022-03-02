@@ -50,8 +50,7 @@
         <button
           *ngIf="
             userSessionData.role === 'admin' ||
-            userSessionData.role === 'supervising officer' ||
-            userSessionData.role === 'accountant'
+            userSessionData.role === 'sales rep'
           "
           (click)="markAsCompleted(userSessionData.role)"
           mat-menu-item

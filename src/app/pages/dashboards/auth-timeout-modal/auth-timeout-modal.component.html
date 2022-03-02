@@ -1,0 +1,50 @@
+<form>
+  <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-title>
+    <h4 class="m-0 headline" fxFlex="auto">
+      <!-- <span>
+        <mat-icon>work_outline</mat-icon>
+      </span> -->
+
+      SESSION TIMEOUT
+    </h4>
+    <!-- <button [matMenuTriggerFor]="settingsMenu" class="text-secondary" mat-icon-button type="button">
+        <mat-icon [icIcon]="icMoreVert"></mat-icon>
+      </button> -->
+    <button
+      class="text-secondary"
+      fxFlex="auto"
+      mat-dialog-close
+      mat-icon-button
+      type="button"
+    >
+      <mat-icon [icIcon]="icClose"></mat-icon>
+    </button>
+  </div>
+  <mat-divider class="-mx-6 text-border"></mat-divider>
+  <mat-dialog-content fxLayout="column" class="content-part">
+    <h4>You Have Been Idle!</h4>
+  </mat-dialog-content>
+  <mat-dialog-actions align="end" class="button">
+    <div fxLayout="row" fxLayoutAlign="start center" mat-dialog-action>
+      <button
+        mat-button
+        mat-dialog-close
+        type="button"
+        class="btn btn-default"
+        fxFlex="auto"
+      >
+        Stay Connected
+      </button>
+      <button
+        color="primary"
+        mat-button
+        type="button"
+        fxFlex="auto"
+        (click)="logout()"
+        class="send-button"
+      >
+        Logout
+      </button>
+    </div>
+  </mat-dialog-actions>
+</form>

@@ -373,6 +373,9 @@ export class OrdersReportComponent implements OnInit, OnDestroy {
               this.hasError = true;
               this.errorMessage =
                 "No data Found for the specified search criteria. Please try with different data";
+            } else {
+              this.hasError = false;
+              this.errorMessage ="";
             }
           } else {
             this.hasError = true;

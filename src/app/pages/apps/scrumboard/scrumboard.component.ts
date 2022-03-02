@@ -71,7 +71,6 @@ export class ScrumboardComponent implements OnInit {
     }).beforeClosed().pipe(
       filter<ScrumboardCard>(Boolean)
     ).subscribe(value => {
-      console.log(value);
       const index = list.children.findIndex(child => child.id === card.id);
       if (index > -1) {
         list.children[index] = value;

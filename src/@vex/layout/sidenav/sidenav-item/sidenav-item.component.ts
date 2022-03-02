@@ -65,7 +65,7 @@ export class SidenavItemComponent implements OnInit, OnChanges {
 
   get shouldDisplay() {
     if(this.item.permission) {
-      return  this.item.permission === this.userSessionData.role;
+      return  this.item.permission.includes(this.userSessionData.role);
     } else {
       return true
     }

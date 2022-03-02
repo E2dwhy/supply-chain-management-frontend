@@ -105,7 +105,7 @@ export class OrderModalComponent implements OnInit {
       price: ["", Validators.required],
       unit_price: [""],
       product_id: [""],
-      product_discount:[0]
+      product_discount: [0],
     });
   }
 
@@ -164,17 +164,13 @@ export class OrderModalComponent implements OnInit {
   }
 
   onApplyDiscount(event) {
-    console.log('[event]', event);
     const discountAmount = event.target.value;
-    console.log('[discount]', discountAmount);
-    const updatedTotal = this.form.value['total_amount'] - discountAmount;
-    this.form.get('total_amount').setValue(updatedTotal);
+    const updatedTotal = this.form.value["total_amount"] - discountAmount;
+    this.form.get("total_amount").setValue(updatedTotal);
   }
 
   onApplyPProductDiscount(event, index) {
-    console.log('[event]', event);
     const discountAmount = event.target.value;
-    console.log('[discount]', discountAmount);
     const price = this.items.controls[index].get("price").value;
     const updatedTotal = price - discountAmount;
     this.items.controls[index].get("price").setValue(updatedTotal);
@@ -269,9 +265,8 @@ export class OrderModalComponent implements OnInit {
 
   setSelectedCustomerData(event) {
     const selectedCustomer = JSON.parse(event.value);
-    this.form.get('name').setValue(selectedCustomer.full_name)
-    this.form.get('delivery_address').setValue(selectedCustomer.address)
-    this.form.get('phone_no').setValue(selectedCustomer.phone_no)
-
+    this.form.get("delivery_address").setValue(selectedCustomer.address);
+    this.form.get("phone_no").setValue(selectedCustomer.phone_no);
+    this.form.get("name").setValue(selectedCustomer.full_name);
   }
 }
