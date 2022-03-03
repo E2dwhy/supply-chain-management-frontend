@@ -58,7 +58,7 @@
 
     <mat-form-field class="flex-auto">
       <mat-label>Phone Number</mat-label>
-      <input formControlName="phone_no" matInput [disabled]="isUpdateMode()" />
+      <input formControlName="phone_no" matInput [disabled]="isUpdateMode()" maxlength="10" />
 
       <mat-icon [icIcon]="icPhone" class="mr-3" matPrefix></mat-icon>
     </mat-form-field>

@@ -1,4 +1,10 @@
-import { Component, Inject, LOCALE_ID, OnDestroy, Renderer2 } from "@angular/core";
+import {
+  Component,
+  Inject,
+  LOCALE_ID,
+  OnDestroy,
+  Renderer2,
+} from "@angular/core";
 import { ConfigService } from "../@vex/services/config.service";
 import { Settings } from "luxon";
 import { DOCUMENT } from "@angular/common";
@@ -42,6 +48,7 @@ import { DEFAULT_INTERRUPTSOURCES, Idle } from "@ng-idle/core";
 import { Keepalive } from "@ng-idle/keepalive";
 import { MatDialog } from "@angular/material/dialog";
 import { AuthTimeoutModalComponent } from "./pages/dashboards/auth-timeout-modal/auth-timeout-modal.component";
+import { USER_ROLES } from "./Models/constants";
 
 @Component({
   selector: "vex-root",
@@ -53,10 +60,11 @@ export class AppComponent implements OnDestroy {
   idleState = "Not started.";
   timedOut = false;
   lastPing?: Date = null;
+  userRoles = USER_ROLES;
 
   userSessionData: any;
   colorVariables = colorVariables;
-  color = colorVariables.green
+  color = colorVariables.green;
   constructor(
     private idle: Idle,
     private keepalive: Keepalive,
@@ -73,45 +81,44 @@ export class AppComponent implements OnDestroy {
     private navigationService: NavigationService,
     private splashScreenService: SplashScreenService
   ) {
+    // sets an idle timeout of 5 seconds, for testing purposes.
+    idle.setIdle(1200);
+    // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
+    idle.setTimeout(30);
+    // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
+    idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
 
-      // sets an idle timeout of 5 seconds, for testing purposes.
-      idle.setIdle(1200);
-      // sets a timeout period of 5 seconds. after 10 seconds of inactivity, the user will be considered timed out.
-      idle.setTimeout(30);
-      // sets the default interrupts, in this case, things like clicks, scrolls, touches to the document
-      idle.setInterrupts(DEFAULT_INTERRUPTSOURCES);
-  
-      idle.onIdleEnd.subscribe(() => {
-        this.idleState = "No longer idle.";
-        console.info('[SESSION TIMEOUT]', this.idleState);
-        this.reset();
-      });
-  
-      idle.onTimeout.subscribe(() => {
-        this.idleState = "Timed out!";
-        this.timedOut = true;
-        console.info('[SESSION TIMEOUT]', this.idleState);
-        this.logout();
-      });
-  
-      idle.onIdleStart.subscribe(() => {
-        this.idleState = "You've gone idle!";
-        console.info('[SESSION TIMEOUT]', this.idleState);
-        this.dialog.open(AuthTimeoutModalComponent);
-      });
-  
-      idle.onTimeoutWarning.subscribe((countdown) => {
-        this.idleState = "You will time out in " + countdown + " seconds!";
-        console.info('[SESSION TIMEOUT]', this.idleState);
-      });
-  
-      // sets the ping interval to 15 seconds
-      keepalive.interval(60);
-  
-      keepalive.onPing.subscribe(() => (this.lastPing = new Date()));
-  
+    idle.onIdleEnd.subscribe(() => {
+      this.idleState = "No longer idle.";
+      console.info("[SESSION TIMEOUT]", this.idleState);
       this.reset();
-  
+    });
+
+    idle.onTimeout.subscribe(() => {
+      this.idleState = "Timed out!";
+      this.timedOut = true;
+      console.info("[SESSION TIMEOUT]", this.idleState);
+      this.logout();
+    });
+
+    idle.onIdleStart.subscribe(() => {
+      this.idleState = "You've gone idle!";
+      console.info("[SESSION TIMEOUT]", this.idleState);
+      this.dialog.open(AuthTimeoutModalComponent);
+    });
+
+    idle.onTimeoutWarning.subscribe((countdown) => {
+      this.idleState = "You will time out in " + countdown + " seconds!";
+      console.info("[SESSION TIMEOUT]", this.idleState);
+    });
+
+    // sets the ping interval to 15 seconds
+    keepalive.interval(60);
+
+    keepalive.onPing.subscribe(() => (this.lastPing = new Date()));
+
+    this.reset();
+
     Settings.defaultLocale = this.localeId;
 
     if (this.platform.BLINK) {
@@ -129,11 +136,15 @@ export class AppComponent implements OnDestroy {
       this.router.navigate(["/login"]);
     }
 
-    
-
     if (this.document) {
-      this.document.documentElement.style.setProperty('--color-primary', this.color.default.replace('rgb(', '').replace(')', ''));
-      this.document.documentElement.style.setProperty('--color-primary-contrast', this.color.contrast.replace('rgb(', '').replace(')', ''));
+      this.document.documentElement.style.setProperty(
+        "--color-primary",
+        this.color.default.replace("rgb(", "").replace(")", "")
+      );
+      this.document.documentElement.style.setProperty(
+        "--color-primary-contrast",
+        this.color.contrast.replace("rgb(", "").replace(")", "")
+      );
     }
 
     /**
@@ -196,6 +207,13 @@ export class AppComponent implements OnDestroy {
         label: "Orders",
         route: "/dashboards/orders",
         icon: icReceipt,
+        permission: [
+          USER_ROLES.SR,
+          USER_ROLES.ADMIN,
+          USER_ROLES.NSM,
+          USER_ROLES.SUP,
+          USER_ROLES.ACC,
+        ],
         // badge: {
         //   value: '0',
         //   textClass: 'text-teal',
@@ -207,27 +225,27 @@ export class AppComponent implements OnDestroy {
         label: "products",
         route: "/dashboards/products",
         icon: icBook,
-        permission: ["admin", "supply manager", "store manager"],
+        permission: [USER_ROLES.ADMIN, USER_ROLES.SM],
       },
       {
         type: "link",
         label: "Users",
         route: "/dashboards/users",
         icon: icContacts,
-        permission: ["admin"],
+        permission: [USER_ROLES.ADMIN],
       },
       {
         type: "link",
         label: "customers ",
         route: "/dashboards/customers",
         icon: icPerson,
-        permission: ["admin", "sales rep"],
+        permission: [USER_ROLES.ADMIN, USER_ROLES.ACC, USER_ROLES.NSM],
       },
       {
         type: "dropdown",
         label: "Reports",
         icon: icAssessment,
-        permission:["admin"],
+        permission: [USER_ROLES.SR, USER_ROLES.ADMIN],
         children: [
           {
             type: "link",
@@ -768,7 +786,7 @@ export class AppComponent implements OnDestroy {
   ngOnDestroy() {
     this.logout();
   }
-  
+
   reset() {
     this.idle.watch();
     this.idleState = "Started.";

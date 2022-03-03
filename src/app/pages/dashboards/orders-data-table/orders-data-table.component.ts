@@ -33,7 +33,7 @@ import icFolder from "@iconify/icons-ic/twotone-folder";
 import { OrdersService } from "src/app/services/orders.service";
 import { OrderModalComponent } from "./order-modal/order-modal.component";
 import { Router } from "@angular/router";
-import { ORDER_STATUS_TABLE_LABELS } from "src/app/Models/constants";
+import { ORDER_STATUS_TABLE_LABELS, USER_ROLES } from "src/app/Models/constants";
 import { DatePipe } from "@angular/common";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import icRefresh from "@iconify/icons-ic/twotone-refresh";
@@ -73,6 +73,13 @@ export class OrdersDataTableComponent implements OnInit {
       type: "text",
       visible: true,
       cssClasses: ["text-secondary", "font-medium"],
+    },
+    {
+      label: "Sales Rep",
+      property: "salesRep",
+      type: "text",
+      visible: true,
+      cssClasses: ["font-medium"],
     },
     {
       label: "Name",
@@ -136,6 +143,8 @@ export class OrdersDataTableComponent implements OnInit {
   hasError: boolean;
   errorMessage: string;
   isLoading: boolean;
+  users: any;
+  userRoles = USER_ROLES
 
   constructor(
     private dialog: MatDialog,
@@ -186,8 +195,7 @@ export class OrdersDataTableComponent implements OnInit {
     // this.getData().subscribe(customers => {
     //   this.subject$.next(customers);
     // });
-    this.getOrdersList();
-
+    this.getUsersData();
     // this.data$.pipe(
     //   filter<OrderSession[]>(Boolean)
     // ).subscribe(customers => {
@@ -211,10 +219,11 @@ export class OrdersDataTableComponent implements OnInit {
           this.orders = response["data"].map((data) => {
             data.status = this.getStatusLabel(data.status);
             data.created_at = this.datePipe.transform(data.created_at, "short");
+            data['salesRep'] = this.getSalesRepName(data.user_id);
             return data;
           });
           this.dataSource = new MatTableDataSource();
-          this.dataSource.data = response["data"];
+          this.dataSource.data = this.orders;
         } else {
           this.hasError = true;
           this.errorMessage = response["message"];
@@ -242,6 +251,34 @@ export class OrdersDataTableComponent implements OnInit {
   //     }
   //   });
   // }
+
+  getSalesRepName(user_id) {
+    const salesRep = this.users.find(user => user.user_id === user_id);
+    if(salesRep) {
+      return salesRep.full_name;
+    } else {
+      return 'N/A';
+    }
+  }
+
+  getUsersData() {
+    this.isLoading = true;
+    this.authService
+      .getUsersList(this.userSessionData?.user_id)
+      .pipe(takeUntil(this.unsubscribe$))
+      .subscribe((response) => {
+        this.isLoading = false;
+        if (response["status"] === true) {
+          this.users = response["data"]?.filter(
+            (data) => data.role === USER_ROLES.SR
+          );
+          this.getOrdersList();
+        } else {
+          this.hasError = true;
+          this.errorMessage = response["message"];
+        }
+      });
+  }
 
   createOrder() {
     this.dialog

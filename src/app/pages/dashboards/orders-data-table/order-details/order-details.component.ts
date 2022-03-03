@@ -74,7 +74,7 @@ export class OrderDetailsComponent implements OnInit {
         const width = pdf.internal.pageSize.getWidth();
         const height = pdf.internal.pageSize.getHeight();
 
-        pdf.addImage(contentDataURL, 'PNG', 0, 0, 29.7, 21.0);  
+        pdf.addImage(contentDataURL, 'PNG', 0, 0, width, height);  
         pdf.save(`${this.orderID}-invoice.pdf`); 
         this.isExporting = false;  
       }); 

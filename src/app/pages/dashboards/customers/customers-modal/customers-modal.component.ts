@@ -20,6 +20,7 @@ import icEmail from "@iconify/icons-ic/twotone-email";
 import icCopy from "@iconify/icons-ic/twotone-content-copy";
 import icEdit from "@iconify/icons-ic/twotone-edit";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { USER_ROLES_LIST } from "src/app/Models/constants";
 
 @Component({
   selector: "vex-customers-modal",
@@ -47,13 +48,7 @@ export class CustomersModalComponent implements OnInit {
   icCopy = icCopy;
   icEdit = icEdit;
 
-  roleOptions = [
-    "admin",
-    "accountant",
-    "manager",
-    "sales rep",
-    "supply manager",
-  ];
+  roleOptions = USER_ROLES_LIST;
   userSessionData: any;
 
   constructor(

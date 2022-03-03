@@ -142,7 +142,13 @@ export class ProductModalComponent implements OnInit {
   updateProduct() {
     const product = this.form.value;
     product.id = this.orderData.id;
-
+    if (this.form.value["manif_date"]) {
+      const manifDate = new Date(this.form.value["manif_date"])
+        .toISOString()
+        .slice(0, 19)
+        .replace("T", " ");
+      product['manif_date'] = manifDate;
+    }
     this.productsService
       .updateProduct(this.userSessionData?.user_id, product)
       .pipe(take(1))

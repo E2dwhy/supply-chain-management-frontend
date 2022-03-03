@@ -135,7 +135,11 @@
               <h4 class="body-2 text-secondary mt-0">COMPANY</h4>
               <h3 class="title m-0">KACHELAN</h3>
               <div class="text-secondary">
-                <p class="m-0">Lagos</p>
+                <p class="m-0">
+                  4, Gbadebo Osoba Street, 
+                  Monijesu Bus Stop, Adigbe Road,
+                  Abeokuta,Ogun State
+                </p>
                 <!-- <p class="m-0">Brooklyn, NY</p> -->
                 <p class="m-0">Nigeria</p>
 
@@ -156,7 +160,7 @@
                     inline="true"
                     size="1.25em"
                   ></ic-icon>
-                  <span>+1 (961) 400-3535</span>
+                  <span>(+234) 90 524 683 11 </span>
                 </p>
               </div>
             </div>
@@ -170,7 +174,9 @@
               <td class="body-2 text-secondary">PRICE PER</td>
               <!-- <td class="body-2 text-secondary">UNIT</td> -->
               <td class="body-2 text-secondary">QUANTITY</td>
-              <td class="body-2 text-secondary text-right"  *ngIf="showDiscount">DISCOUNT</td>
+              <td class="body-2 text-secondary text-right" *ngIf="showDiscount">
+                DISCOUNT
+              </td>
               <td class="body-2 text-secondary text-right">TOTAL</td>
             </tr>
           </thead>
@@ -181,13 +187,15 @@
               </td>
               <td class="py-6 border-b">{{ item.unit_price }}</td>
               <td class="py-6 border-b">{{ item.qty }}</td>
-              <td class="py-6 border-b text-secondary text-right" *ngIf="showDiscount">
+              <td
+                class="py-6 border-b text-secondary text-right"
+                *ngIf="showDiscount"
+              >
                 ₦-{{ item.product_discount }}
               </td>
               <td class="py-6 border-b font-medium text-right">
                 ₦{{ item.price }}
               </td>
-
             </tr>
           </tbody>
         </table>

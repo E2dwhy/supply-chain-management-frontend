@@ -19,6 +19,7 @@ import { Router, UrlSerializer } from "@angular/router";
 import { AuthserviceService } from "src/app/services/authservice.service";
 import { take } from "rxjs/operators";
 import { MatSnackBar } from "@angular/material/snack-bar";
+import { USER_ROLES_LIST } from "src/app/Models/constants";
 
 
 @Component({
@@ -48,13 +49,7 @@ export class UserDetailsModalComponent implements OnInit {
   icEdit = icEdit;
 
 
-  roleOptions = [
-    'admin',
-    'accountant',
-    'manager',
-    'sales rep',
-    'supply manager'
-  ]
+  roleOptions = USER_ROLES_LIST;
   userSessionData: any;
 
   constructor(
@@ -86,7 +81,7 @@ export class UserDetailsModalComponent implements OnInit {
       id: [this.userData.id],
       full_name: [this.userData.full_name || "", Validators.required],
       email: [this.userData.email || "", Validators.email],
-      phone_no: [this.userData.phone_no || ""],
+      phone_no: [this.userData.phone_no || "", Validators.pattern(/^\d+$/)],
       role: [this.userData.role || "", Validators.required],
       url: [this.userData.url || ""]
     });

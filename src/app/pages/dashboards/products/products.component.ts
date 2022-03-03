@@ -1,22 +1,25 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { Component, Input, OnInit, ViewChild } from '@angular/core';
-import { FormControl } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MAT_FORM_FIELD_DEFAULT_OPTIONS, MatFormFieldDefaultOptions } from '@angular/material/form-field';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSelectChange } from '@angular/material/select';
-import { MatSort } from '@angular/material/sort';
-import { MatTableDataSource } from '@angular/material/table';
-import { ReplaySubject, Observable, Subject, of } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
-import { fadeInUp400ms } from 'src/@vex/animations/fade-in-up.animation';
-import { stagger40ms } from 'src/@vex/animations/stagger.animation';
-import { TableColumn } from 'src/@vex/interfaces/table-column.interface';
-import { UserSession } from 'src/app/Models/interfaces';
-import { AuthserviceService } from 'src/app/services/authservice.service';
-import { aioTableLabels, aioTableData } from 'src/static-data/aio-table-data';
-import { CustomerCreateUpdateComponent } from '../../apps/aio-table/customer-create-update/customer-create-update.component';
-import { Customer } from '../../apps/aio-table/interfaces/customer.model';
+import { SelectionModel } from "@angular/cdk/collections";
+import { Component, Input, OnInit, ViewChild } from "@angular/core";
+import { FormControl } from "@angular/forms";
+import { MatDialog } from "@angular/material/dialog";
+import {
+  MAT_FORM_FIELD_DEFAULT_OPTIONS,
+  MatFormFieldDefaultOptions,
+} from "@angular/material/form-field";
+import { MatPaginator } from "@angular/material/paginator";
+import { MatSelectChange } from "@angular/material/select";
+import { MatSort } from "@angular/material/sort";
+import { MatTableDataSource } from "@angular/material/table";
+import { ReplaySubject, Observable, Subject, of } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+import { fadeInUp400ms } from "src/@vex/animations/fade-in-up.animation";
+import { stagger40ms } from "src/@vex/animations/stagger.animation";
+import { TableColumn } from "src/@vex/interfaces/table-column.interface";
+import { UserSession } from "src/app/Models/interfaces";
+import { AuthserviceService } from "src/app/services/authservice.service";
+import { aioTableLabels, aioTableData } from "src/static-data/aio-table-data";
+import { CustomerCreateUpdateComponent } from "../../apps/aio-table/customer-create-update/customer-create-update.component";
+import { Customer } from "../../apps/aio-table/interfaces/customer.model";
 import icEdit from "@iconify/icons-ic/twotone-edit";
 import icDelete from "@iconify/icons-ic/twotone-delete";
 import icSearch from "@iconify/icons-ic/twotone-search";
@@ -27,14 +30,14 @@ import icMail from "@iconify/icons-ic/twotone-mail";
 import icMap from "@iconify/icons-ic/twotone-map";
 import icMoreHoriz from "@iconify/icons-ic/twotone-more-horiz";
 import icFolder from "@iconify/icons-ic/twotone-folder";
-import { ProductModalComponent } from './product-modal/product-modal.component';
-import { ProductsService } from 'src/app/services/products.service';
-import { DatePipe } from '@angular/common';
+import { ProductModalComponent } from "./product-modal/product-modal.component";
+import { ProductsService } from "src/app/services/products.service";
+import { DatePipe } from "@angular/common";
 @Component({
-  selector: 'vex-products',
-  templateUrl: './products.component.html',
-  styleUrls: ['./products.component.scss'],
-    animations: [fadeInUp400ms, stagger40ms],
+  selector: "vex-products",
+  templateUrl: "./products.component.html",
+  styleUrls: ["./products.component.scss"],
+  animations: [fadeInUp400ms, stagger40ms],
   providers: [
     {
       provide: MAT_FORM_FIELD_DEFAULT_OPTIONS,
@@ -74,10 +77,24 @@ export class ProductsComponent implements OnInit {
       cssClasses: ["font-medium"],
     },
     { label: "Quantity", property: "qty", type: "text", visible: true },
-    // { label: "Contact", property: "phone_no", type: "button", visible: true },
     {
       label: "Unit Price",
       property: "price",
+      type: "text",
+      visible: true,
+      cssClasses: ["text-secondary", "font-medium"],
+    },
+    {
+      label: "Manif Date",
+      property: "manif_date",
+      type: "text",
+      visible: true,
+      cssClasses: ["text-secondary", "font-medium"],
+    },
+
+    {
+      label: "Batch No",
+      property: "batch_no",
       type: "text",
       visible: true,
       cssClasses: ["text-secondary", "font-medium"],
@@ -179,15 +196,16 @@ export class ProductsComponent implements OnInit {
       .subscribe((response) => {
         this.isLoading = false;
         if (response["status"] === true) {
-          this.products = response["data"].map(data => {
-            data.created_at = this.datePipe.transform(data.created_at, 'short')
-            return data
-          });;
+          this.products = response["data"].map((data) => {
+            data.created_at = this.datePipe.transform(data.created_at, "short");
+            data.manif_date = this.datePipe.transform(data.manif_date, "short");
+            return data;
+          });
           this.dataSource = new MatTableDataSource();
           this.dataSource.data = this.products;
         } else {
           this.hasError = true;
-          this.errorMessage = response['message'];
+          this.errorMessage = response["message"];
         }
       });
   }
@@ -320,5 +338,4 @@ export class ProductsComponent implements OnInit {
     // this.orders[index].labels = change.value;
     // this.subject$.next(this.orders);
   }
-
 }

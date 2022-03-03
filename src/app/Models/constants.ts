@@ -93,12 +93,12 @@ export const ORDER_STATUS_TABLE_LABELS = [
 ];
 
 export enum USER_ROLES {
-  SALES ='sales rep',
-  ADMIKN = 'admin',
-  SO = 'supervising officer',
+  ADMIN = 'admin',
+  NSM = 'supervising officer',
   ACC = 'accountant',
   SM = 'store manager',
-  SR = 'sales rep'
+  SR = 'sales rep',
+  SUP = 'supervisor'
 }
 
 export const USER_ROLES_LIST = [

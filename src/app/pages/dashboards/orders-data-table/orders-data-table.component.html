@@ -102,14 +102,14 @@
         </button>
 
         <button
-        class="ml-4"
-        fxFlex="none"
-        mat-icon-button
-        type="button"
-        (click)=refreshData()
-      >
-        <mat-icon [icIcon]="icRefresh"></mat-icon>
-      </button>
+          class="ml-4"
+          fxFlex="none"
+          mat-icon-button
+          type="button"
+          (click)="refreshData()"
+        >
+          <mat-icon [icIcon]="icRefresh"></mat-icon>
+        </button>
 
         <button
           [matMenuTriggerFor]="columnFilterMenu"
@@ -131,8 +131,9 @@
           matTooltip="Add Order"
           type="button"
           *ngIf="
-            userSessionData.role === 'admin' ||
-            userSessionData.role === 'salesRep'
+            userSessionData.role === userRoles.ADMIN ||
+            userSessionData.role === userRoles.SR ||
+            userSessionData.role === userRoles.ACC
           "
         >
           <mat-icon [icIcon]="icAdd"></mat-icon>
@@ -344,11 +345,23 @@
 
 <mat-menu #actionsMenu="matMenu" xPosition="before" yPosition="below">
   <ng-template let-order="order" matMenuContent>
-    <button (click)="updateOrder(order)" mat-menu-item>
+    <button
+      *ngIf="
+        userSessionData.role === 'admin' || userSessionData.role === 'sales rep'
+      "
+      (click)="updateOrder(order)"
+      mat-menu-item
+    >
       <mat-icon [icIcon]="icEdit"></mat-icon>
       <span>Modify</span>
     </button>
-    <button (click)="deleteOrder(order)" mat-menu-item>
+    <button
+      *ngIf="
+        userSessionData.role === 'admin' || userSessionData.role === 'sales rep'
+      "
+      (click)="deleteOrder(order)"
+      mat-menu-item
+    >
       <mat-icon [icIcon]="icDelete"></mat-icon>
       <span>Delete</span>
     </button>
